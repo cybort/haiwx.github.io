@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+    
+    <entry>
+      <title><![CDATA[Linux VPS 下 SSH 常用命令]]></title>
+      <url>http://haiwx.github.io/2016/10/12/LinuxVPS/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/10/12/57fdba2fd9d02.png" alt="linux"><br>对于我这种小白，还是扎扎实实从基础开始吧，好好学习使用Linux，早日摆脱辣鸡Windows。 Y(&gt;_&lt;、)Y</p>
+<blockquote>
+<p>搬运自：<a href="http://www.vpser.net/build/linux-vps-ssh-command.html" target="_blank" rel="external">VPS侦探</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="目录操作"><a href="#目录操作" class="headerlink" title="目录操作"></a>目录操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">rm -rf mydir /*删除mydir目录，不需要确认，直接删除*/</div><div class="line">mkdir dirname /*创建名为dirname的目录*/</div><div class="line">cd mydir /*进入mydir目录*/</div><div class="line">cd - /*返回进入此目录之前所在的目录*/</div><div class="line">cd .. /*返回上一级目录，中间有空格*/</div><div class="line">cd ~ /*回当前用户家目录*/</div><div class="line">mv tools tool /*把tools目录改名为tool*/</div><div class="line">ln -s tool bac /*给tool目录创建名为bac的符号链接,最熟悉的应该就是FTP中www链接到public_html目录了*/</div><div class="line">cp -a tool /home/vpser/www /*把tool目录，复制到www目录下*/</div><div class="line">ls /*列出当前目录下的内容*/</div></pre></td></tr></table></figure>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">rm go.tar        /*删除go.tar文件*/</div><div class="line">find mt.cgi    /*查找文件名为mt.cgi的文件*/</div><div class="line">df -h              /*查看磁盘剩余空间*/</div></pre></td></tr></table></figure>
+<h2 id="解压缩"><a href="#解压缩" class="headerlink" title="解压缩"></a>解压缩</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">tar xvf wordpress.tar       /*解压tar格式的文件*/</div><div class="line">tar tvf myfile.tar     /*查看tar文件中包含的文件*/</div><div class="line"></div><div class="line">tar cf toole.tar tool /*把tool目录打包为toole.tar文件*/</div><div class="line">tar zcf vpser.tar.gz tool /*把tool目录打包且压缩为vpser.tar.gz文件，因为.tar文件几乎是没有压缩过的，MT的.tar.gz文件解压成.tar文件后差不多是10MB*/</div><div class="line"></div><div class="line">tar jcvf  /var/bak/www.tar.bz2 /var/www/    /*创建.tar.bz2文件，压缩率高*/</div><div class="line">tar xjf www.tar.bz2 /*解压tar.bz2格式*/</div><div class="line"></div><div class="line">gzip -d ge.tar.gz        /*解压.tar.gz文件为.tar文件*/</div><div class="line">unzip phpbb.zip      /*解压zip文件，windows下要压缩出一个.tar.gz格式的文件还是有点麻烦的*/</div></pre></td></tr></table></figure>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wget http://soft.vpser.net/web/nginx/nginx-0.8.0.tar.gz</div><div class="line">/*下载远程服务器上的文件到自己的服务器，连上传都省了，服务器不是100M就是1000M的带宽，下载一个2-3兆的MT还不是几十秒的事*/</div><div class="line">wget -c http://soft.vpser.net/web/nginx/nginx-0.8.0.tar.gz</div><div class="line">/*继续下载上次未下载完的文件*/</div></pre></td></tr></table></figure>
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">ps -aux   /*ps 进程状态查询命令*/</div><div class="line"></div><div class="line">ps命令输出字段的含义：</div><div class="line">[list]</div><div class="line">[*]USER，进程所有者的用户名。</div><div class="line">[*]PID，进程号，可以唯一标识该进程。</div><div class="line">[*]%CPU，进程自最近一次刷新以来所占用的CPU时间和总时间的百分比。</div><div class="line">[*]%MEM，进程使用内存的百分比。</div><div class="line">[*]VSZ，进程使用的虚拟内存大小，以K为单位。</div><div class="line">[*]RSS，进程占用的物理内存的总数量，以K为单位。</div><div class="line">[*]TTY，进程相关的终端名。</div><div class="line">[*]STAT，进程状态，用(R--运行或准备运行；S--睡眠状态；I--空闲；Z--冻结；D--不间断睡眠；W-进程没有驻留页；T停止或跟踪。)这些字母来表示。</div><div class="line">[*]START，进程开始运行时间。</div><div class="line">[*]TIME，进程使用的总CPU时间。</div><div class="line">[*]COMMAND，被执行的命令行。</div><div class="line">[/list]</div><div class="line"></div><div class="line">ps -aux | grep nginx  /*在所有进程中，查找nginx的进程*/</div><div class="line">kill 1234    /*1234为进程ID，即ps -aux 中的PID*/</div><div class="line">killall nginx /*killall 通过程序的名字，直接杀死所有进程，nginx为进程名*/</div></pre></td></tr></table></figure>
+<h2 id="资源占用查询"><a href="#资源占用查询" class="headerlink" title="资源占用查询"></a>资源占用查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">df -sh /home/wwwroot/* /*查看/home/wwwroot/下各个目录的占用大小*/</div><div class="line">free -m /*查看内存核swap使用情况*/</div><div class="line">top /*查看程序的cpu、内存使用情况*/</div><div class="line">netstat -ntl /*查看端口占用情况*/</div></pre></td></tr></table></figure>
+<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">adduser /*添加用户，如adduser vpser*/</div><div class="line">deluser /*删除用户，如deluser vpser*/</div><div class="line">passwd /*修改密码，按提示输入密码，密码不显示*/</div></pre></td></tr></table></figure>
+<h2 id="Vim操作"><a href="#Vim操作" class="headerlink" title="Vim操作"></a>Vim操作</h2><blockquote>
+<p>vim详细教程：<a href="http://www.vpser.net/manage/vi.html" target="_blank" rel="external">http://www.vpser.net/manage/vi.html</a></p>
+</blockquote>
+<h3 id="移动类的"><a href="#移动类的" class="headerlink" title="移动类的"></a>移动类的</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">h/j/k/l: 左/下/上/右　移一格</div><div class="line">w : 向后词移动　（前面加数字移动多少个词）</div><div class="line">b : 向前词移动　（前面加数字移动多少个词）</div><div class="line">e : 向后移到词末</div><div class="line">ge : 向前移到词末</div><div class="line">$ &lt;End&gt; : 行末</div><div class="line">0 &lt;Home&gt; : 行首</div><div class="line">tx : 向右查找本行的x并移到那儿（大写时向左）</div><div class="line">33G : 移到文件的第33行</div><div class="line">gg : 文件首行</div><div class="line">G : 文件尾行</div><div class="line">33% : 文件的33%处</div><div class="line">H/M/L : 屏幕的首/中/尾行</div><div class="line">zt/zz/zb : 当前行移到屏幕的首/中/底部</div></pre></td></tr></table></figure>
+<h3 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&quot;  : 回到跳转来的地方</div><div class="line">CTRL-O : 跳到一个 “较老” 的地方</div><div class="line">CTRL-I &lt;Tab&gt; : 则跳到一个 “较新” 的地方</div></pre></td></tr></table></figure>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/ : 向下查找（后加关键字）</div><div class="line">? : 向上查找（后加关键字）</div><div class="line">n : 下一条符合的记录</div></pre></td></tr></table></figure>
+<h3 id="编辑"><a href="#编辑" class="headerlink" title="编辑"></a>编辑</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">i : 转换到插入模式</div><div class="line">x : 删除当前字符</div><div class="line">. : 重复最后一次的修改操作(同PS里ctrl+f执行滤镜)</div><div class="line">u : 撤销操作</div><div class="line">CTRL-R : 重做</div><div class="line">p : 将删除的字符插入到当前位置(put)</div></pre></td></tr></table></figure>
+<h3 id="退出保存"><a href="#退出保存" class="headerlink" title="退出保存"></a>退出保存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">:q : 退出</div><div class="line">:q! : 不保存退出</div><div class="line">ZZ : 保存后退出</div><div class="line">:e! : 放弃修改重新编辑</div></pre></td></tr></table></figure>
+<p><strong>掌握这些基本命令，Linux下的基本使用已经掌握，只要多加练习，多遇到问题，解决问题，能力就会不断的提升。</strong></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[免费的计算机编程类中文书籍]]></title>
+      <url>http://haiwx.github.io/2016/09/13/CodeBooks/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/09/13/57d79732d2255.jpg" alt="Book"><br>不管是美人还是丑人都要多读书。互联网是一部百科全书，获取知识信息更快，更高效，从网上获取编程知识明显是一种更聪明的方法。</p>
+<blockquote>
+<p>搬运自：<a href="https://github.com/justjavac/free-programming-books-zh_CN" target="_blank" rel="external">justjavac</a>  </p>
+</blockquote>
+<a id="more"></a>
+<h2 id="语言无关类"><a href="#语言无关类" class="headerlink" title="语言无关类"></a>语言无关类</h2><h3 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h3><ul>
+<li><a href="http://i.linuxtoy.org/docs/guide/index.html" target="_blank" rel="external">开源世界旅行手册</a></li>
+<li><a href="http://vbird.dic.ksu.edu.tw/" target="_blank" rel="external">鸟哥的Linux私房菜</a></li>
+<li><a href="http://billie66.github.io/TLCL/index.html" target="_blank" rel="external">The Linux Command Line</a> (中英文版)</li>
+<li><a href="http://oss.org.cn/kernel-book/ldd3/index.html" target="_blank" rel="external">Linux 设备驱动</a> (第三版)</li>
+<li><a href="http://www.kerneltravel.net/kernel-book/%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90Linux%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81.html" target="_blank" rel="external">深入分析Linux内核源码</a></li>
+<li><a href="http://cb.vu/unixtoolbox_zh_CN.xhtml" target="_blank" rel="external">UNIX TOOLBOX</a></li>
+<li><a href="https://github.com/widuu/chinese_docker" target="_blank" rel="external">Docker中文指南</a></li>
+<li><a href="https://github.com/yeasy/docker_practice" target="_blank" rel="external">Docker —— 从入门到实践</a></li>
+<li><a href="http://yuedu.baidu.com/ebook/d817967416fc700abb68fca1" target="_blank" rel="external">Docker入门实战</a></li>
+<li><a href="https://github.com/wsargent/docker-cheat-sheet/tree/master/zh-cn#docker-cheat-sheet" target="_blank" rel="external">Docker Cheat Sheet</a></li>
+<li><a href="http://freeradius.akagi201.org" target="_blank" rel="external">FreeRADIUS新手入门</a></li>
+<li><a href="https://aaaaaashu.gitbooks.io/mac-dev-setup/content/" target="_blank" rel="external">Mac 开发配置手册</a></li>
+<li><a href="https://www.freebsd.org/doc/zh_CN/books/handbook/index.html" target="_blank" rel="external">FreeBSD 使用手册</a></li>
+<li><a href="http://billie66.github.io/TLCL/book/" target="_blank" rel="external">Linux 命令行(中文版)</a></li>
+<li><a href="http://works.jinbuguo.com/lfs/lfs62/index.html" target="_blank" rel="external">Linux 构建指南</a></li>
+<li><a href="https://github.com/me115/linuxtools_rst" target="_blank" rel="external">Linux工具快速教程</a></li>
+<li><a href="https://www.gitbook.com/book/tinylab/linux-doc/details" target="_blank" rel="external">Linux Documentation (中文版)</a></li>
+<li><a href="https://www.gitbook.com/book/tinylab/elinux/details" target="_blank" rel="external">嵌入式 Linux 知识库 (eLinux.org 中文版)</a></li>
+<li><a href="https://github.com/tobegit3hub/understand_linux_process" target="_blank" rel="external">理解Linux进程</a></li>
+<li><a href="https://github.com/jlevy/the-art-of-command-line/blob/master/README-zh.md" target="_blank" rel="external">命令行的艺术</a></li>
+<li><a href="https://spacewander.gitbooks.io/systemtapbeginnersguide_zh/content/index.html" target="_blank" rel="external">SystemTap新手指南</a></li>
+<li><a href="https://github.com/wizardforcel/think-os-zh" target="_blank" rel="external">操作系统思考</a></li>
+</ul>
+<h4 id="智能系统"><a href="#智能系统" class="headerlink" title="智能系统"></a>智能系统</h4><ul>
+<li><a href="https://github.com/phodal/designiot" target="_blank" rel="external">一步步搭建物联网系统</a></li>
+</ul>
+<h3 id="分布式系统"><a href="#分布式系统" class="headerlink" title="分布式系统"></a>分布式系统</h3><ul>
+<li><a href="http://dcaoyuan.github.io/papers/pdfs/Scalability.pdf" target="_blank" rel="external">走向分布式</a></li>
+</ul>
+<h3 id="编译原理"><a href="#编译原理" class="headerlink" title="编译原理"></a>编译原理</h3><ul>
+<li><a href="https://github.com/DeathKing/Learning-SICP" target="_blank" rel="external">《计算机程序的结构和解释》公开课 翻译项目</a></li>
+</ul>
+<h3 id="函数式概念"><a href="#函数式概念" class="headerlink" title="函数式概念"></a>函数式概念</h3><ul>
+<li><a href="https://github.com/justinyhuang/Functional-Programming-For-The-Rest-of-Us-Cn" target="_blank" rel="external">傻瓜函数编程</a></li>
+</ul>
+<h3 id="计算机图形学"><a href="#计算机图形学" class="headerlink" title="计算机图形学"></a>计算机图形学</h3><ul>
+<li><a href="https://github.com/zilongshanren/opengl-tutorials" target="_blank" rel="external">OpenGL 教程</a></li>
+<li><a href="http://html5.iii.org.tw/course/webgl/" target="_blank" rel="external">WebGL自学网</a></li>
+</ul>
+<h3 id="WEB服务器"><a href="#WEB服务器" class="headerlink" title="WEB服务器"></a>WEB服务器</h3><ul>
+<li><a href="http://tengine.taobao.org/book/index.html" target="_blank" rel="external">Nginx开发从入门到精通</a> (淘宝团队出品)</li>
+<li><a href="http://www.ttlsa.com/nginx/nginx-stu-pdf/" target="_blank" rel="external">Nginx教程从入门到精通</a>(PDF版本，运维生存时间出品)</li>
+<li><a href="https://www.gitbook.com/book/moonbingbing/openresty-best-practices/details" target="_blank" rel="external">OpenResty最佳实践</a></li>
+<li><a href="http://works.jinbuguo.com/apache/menu22/index.html" target="_blank" rel="external">Apache 中文手册</a></li>
+</ul>
+<h3 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h3><ul>
+<li><a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="external">Git教程</a> （本文由 <a href="http://www.liaoxuefeng.com" target="_blank" rel="external">廖雪峰</a> 创作，如果觉得本教程对您有帮助，可以去 <a href="https://itunes.apple.com/cn/app/git-jiao-cheng/id876420437" target="_blank" rel="external">iTunes</a> 购买）</li>
+<li><a href="http://rogerdudler.github.io/git-guide/index.zh.html" target="_blank" rel="external">git - 简易指南</a></li>
+<li><a href="http://backlogtool.com/git-guide/cn/" target="_blank" rel="external">猴子都能懂的GIT入门</a></li>
+<li><a href="http://gitref.justjavac.com" target="_blank" rel="external">Git 参考手册</a></li>
+<li><a href="http://git-scm.com/book/zh/v2" target="_blank" rel="external">Pro Git</a></li>
+<li><a href="https://www.gitbook.com/book/0532/progit/details" target="_blank" rel="external">Pro Git 中文版</a> (整理在gitbook上)</li>
+<li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/intl/zh_cn/" target="_blank" rel="external">Git Magic</a></li>
+<li><a href="http://www.worldhello.net/gotgithub/index.html" target="_blank" rel="external">GotGitHub</a></li>
+<li><a href="http://www.worldhello.net/gotgit/" target="_blank" rel="external">Git权威指南</a></li>
+<li><a href="http://gitbook.liuhui998.com/index.html" target="_blank" rel="external">Git Community Book 中文版</a></li>
+<li><a href="https://www.mercurial-scm.org/wiki/ChineseTutorial" target="_blank" rel="external">Mercurial 使用教程</a></li>
+<li><a href="http://bucunzai.net/hginit/" target="_blank" rel="external">HgInit (中文版)</a></li>
+<li><a href="http://igit.linuxtoy.org" target="_blank" rel="external">沉浸式学 Git</a></li>
+<li><a href="https://github.com/flyhigher139/Git-Cheat-Sheet" target="_blank" rel="external">Git-Cheat-Sheet</a> （感谢 @flyhigher139 翻译了中文版）</li>
+<li><a href="https://snowdream86.gitbooks.io/github-cheat-sheet/content/zh/index.html" target="_blank" rel="external">GitHub秘籍</a></li>
+<li><a href="https://github.com/waylau/github-help" target="_blank" rel="external">GitHub帮助文档</a></li>
+<li><a href="http://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html" target="_blank" rel="external">git-flow 备忘清单</a></li>
+<li><a href="http://svnbook.red-bean.com/nightly/zh/index.html" target="_blank" rel="external">svn 手册</a></li>
+<li><a href="https://github.com/phodal/github-roam" target="_blank" rel="external">GitHub漫游指南</a></li>
+</ul>
+<h3 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h3><ul>
+<li><a href="http://exvim.github.io/docs-zh/intro/" target="_blank" rel="external">exvim–vim 改良成IDE项目</a></li>
+<li><a href="http://learnvimscriptthehardway.onefloweroneworld.com/" target="_blank" rel="external">笨方法学Vimscript 中译本</a></li>
+<li><a href="https://github.com/vimcn/vimcdoc" target="_blank" rel="external">Vim中文文档</a></li>
+<li><a href="https://github.com/yangyangwithgnu/use_vim_as_ide" target="_blank" rel="external">所需即所获：像 IDE 一样使用 vim</a></li>
+<li><a href="https://github.com/wizardforcel/atom-flight-manual-zh-cn" target="_blank" rel="external">Atom飞行手册中文版</a></li>
+<li><a href="https://github.com/wizardforcel/markdown-simple-world" target="_blank" rel="external">Markdown·简单的世界</a></li>
+<li><a href="https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/guide-zh.org" target="_blank" rel="external">一年成为 Emacs 高手</a></li>
+<li><a href="http://lifegoo.pluskid.org/upload/blog/152/Survive.in.Emacs.pdf" target="_blank" rel="external">Emacs 生存指南</a></li>
+<li><a href="https://atom-china.org/t/atom/62" target="_blank" rel="external">Atom官方手册</a></li>
+</ul>
+<h3 id="NoSQL"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</h3><ul>
+<li><a href="http://old.sebug.net/paper/databases/nosql/Nosql.html" target="_blank" rel="external">NoSQL数据库笔谈</a></li>
+<li><a href="http://redisbook.com/" target="_blank" rel="external">Redis 设计与实现</a></li>
+<li><a href="http://redisdoc.com/" target="_blank" rel="external">Redis 命令参考</a></li>
+<li><a href="https://github.com/huangz1990/redis-3.0-annotated" target="_blank" rel="external">带有详细注释的 Redis 3.0 代码</a></li>
+<li><a href="https://github.com/huangz1990/annotated_redis_source" target="_blank" rel="external">带有详细注释的 Redis 2.6 代码</a></li>
+<li><a href="https://github.com/justinyhuang/the-little-mongodb-book-cn/blob/master/mongodb.md" target="_blank" rel="external">The Little MongoDB Book</a></li>
+<li><a href="https://github.com/JasonLai256/the-little-redis-book/blob/master/cn/redis.md" target="_blank" rel="external">The Little Redis Book</a></li>
+<li><a href="http://docs.neo4j.org.cn/" target="_blank" rel="external">Neo4j 简体中文手册 v1.8</a></li>
+<li><a href="http://neo4j.tw/" target="_blank" rel="external">Neo4j .rb 中文資源</a></li>
+<li><a href="http://disquebook.com" target="_blank" rel="external">Disque 使用教程</a></li>
+<li><a href="https://github.com/JerryLead/SparkInternals/tree/master/markdown" target="_blank" rel="external">Apache Spark 设计与实现</a></li>
+</ul>
+<h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><ul>
+<li><a href="http://works.jinbuguo.com/postgresql/menu823/index.html" target="_blank" rel="external">PostgreSQL 8.2.3 中文文档</a></li>
+<li><a href="http://www.postgres.cn/docs/9.3/index.html" target="_blank" rel="external">PostgreSQL 9.3.1 中文文档</a></li>
+<li><a href="http://www.postgres.cn/docs/9.5/index.html" target="_blank" rel="external">PostgreSQL 9.5.3 中文文档</a></li>
+</ul>
+<h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><ul>
+<li><a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" target="_blank" rel="external">MySQL索引背后的数据结构及算法原理</a></li>
+<li><a href="http://www.cnblogs.com/mr-wid/archive/2013/05/09/3068229.html" target="_blank" rel="external">21分钟MySQL入门教程</a></li>
+</ul>
+<h3 id="管理和监控"><a href="#管理和监控" class="headerlink" title="管理和监控"></a>管理和监控</h3><ul>
+<li><a href="http://kibana.logstash.es" target="_blank" rel="external">ELKstack 中文指南</a></li>
+<li><a href="http://udn.yyuap.com/doc/mastering-elasticsearch/" target="_blank" rel="external">Mastering Elasticsearch(中文版)</a></li>
+<li><a href="https://www.gitbook.com/book/fuxiaopang/learnelasticsearch/details" target="_blank" rel="external">ElasticSearch 权威指南</a></li>
+<li><a href="http://es.xiaoleilu.com" target="_blank" rel="external">Elasticsearch 权威指南（中文版）</a></li>
+<li><a href="https://github.com/chenryn/logstash-best-practice-cn" target="_blank" rel="external">Logstash 最佳实践</a></li>
+<li><a href="http://bbs.konotes.org/workdoc/puppet-27/" target="_blank" rel="external">Puppet 2.7 Cookbook 中文版</a></li>
+</ul>
+<h3 id="项目相关"><a href="#项目相关" class="headerlink" title="项目相关"></a>项目相关</h3><ul>
+<li><a href="http://article.yeeyan.org/view/2251/94882" target="_blank" rel="external">持续集成（第二版）</a> (译言网)</li>
+<li><a href="http://www.ibm.com/developerworks/cn/java/j-ap/" target="_blank" rel="external">让开发自动化系列专栏</a></li>
+<li><a href="http://www.ibm.com/developerworks/cn/java/j-cq/" target="_blank" rel="external">追求代码质量</a></li>
+<li><a href="https://github.com/fool2fish/selenium-doc" target="_blank" rel="external">selenium 中文文档</a></li>
+<li><a href="http://it-ebooks.flygon.net/selenium-simple-tutorial/" target="_blank" rel="external">Selenium Webdriver 简易教程</a></li>
+<li><a href="http://local.joelonsoftware.com/wiki/Chinese_\(Simplified\" target="_blank" rel="external">Joel谈软件</a>)</li>
+<li><a href="http://local.joelonsoftware.com/wiki/%E9%A6%96%E9%A0%81" target="_blank" rel="external">約耳談軟體(Joel on Software)</a></li>
+<li><a href="https://github.com/waylau/Gradle-2-User-Guide" target="_blank" rel="external">Gradle 2 用户指南</a></li>
+<li><a href="http://yuedu.baidu.com/ebook/f23af265998fcc22bcd10da2" target="_blank" rel="external">Gradle 中文使用文档</a></li>
+<li><a href="https://github.com/ecomfe/spec" target="_blank" rel="external">编码规范</a></li>
+<li><a href="http://www.ituring.com.cn/book/1143" target="_blank" rel="external">开源软件架构</a></li>
+<li><a href="http://docs.huihoo.com/gnu/linux/gmake.html" target="_blank" rel="external">GNU make 指南</a></li>
+<li><a href="http://www.yayu.org/book/gnu_make/" target="_blank" rel="external">GNU make 中文手册</a></li>
+<li><a href="http://12factor.net/zh_cn/" target="_blank" rel="external">The Twelve-Factor App</a></li>
+</ul>
+<h3 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h3><ul>
+<li><a href="https://github.com/me115/design_patterns" target="_blank" rel="external">图说设计模式</a></li>
+<li><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">史上最全设计模式导学目录</a></li>
+<li><a href="https://github.com/AlfredTheBest/Design-Pattern" target="_blank" rel="external">design pattern 包教不包会</a></li>
+<li><a href="https://quanke.gitbooks.io/design-pattern-java/content/" target="_blank" rel="external">设计模式 Java 版</a></li>
+</ul>
+<h3 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h3><ul>
+<li><a href="http://www.20thingsilearned.com/zh-CN/home" target="_blank" rel="external">关于浏览器和网络的 20 项须知</a></li>
+<li><a href="http://jinlong.github.io/2013/08/29/devtoolsecrets/" target="_blank" rel="external">浏览器开发工具的秘密</a></li>
+<li><a href="https://github.com/CN-Chrome-DevTools/CN-Chrome-DevTools" target="_blank" rel="external">Chrome 开发者工具中文手册</a></li>
+<li><a href="http://open.chrome.360.cn/extension_dev/overview.html" target="_blank" rel="external">Chrome扩展开发文档</a></li>
+<li><a href="http://www.gruntjs.net/" target="_blank" rel="external">Grunt中文文档</a></li>
+<li><a href="http://www.gulpjs.com.cn/docs/" target="_blank" rel="external">gulp中文文档</a></li>
+<li><a href="https://github.com/nimojs/gulp-book" target="_blank" rel="external">Gulp 入门指南</a></li>
+<li><a href="https://github.com/AlloyTeam/Mars" target="_blank" rel="external">移动Web前端知识库</a></li>
+<li><a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">正则表达式30分钟入门教程</a></li>
+<li><a href="https://github.com/fouber/blog/issues/2" target="_blank" rel="external">前端开发体系建设日记</a></li>
+<li><a href="https://github.com/hoosin/mobile-web-favorites" target="_blank" rel="external">移动前端开发收藏夹</a></li>
+<li><a href="https://github.com/darcyliu/google-styleguide/blob/master/JSONStyleGuide.md" target="_blank" rel="external">JSON风格指南</a></li>
+<li><a href="https://github.com/bolasblack/http-api-guide" target="_blank" rel="external">HTTP 接口设计指北</a></li>
+<li><a href="https://github.com/hacke2/hacke2.github.io/issues/1" target="_blank" rel="external">前端资源分享（一）</a></li>
+<li><a href="https://github.com/hacke2/hacke2.github.io/issues/3" target="_blank" rel="external">前端资源分享（二）</a></li>
+<li><a href="http://coderlmn.github.io/code-standards/" target="_blank" rel="external">前端代码规范 及 最佳实践</a></li>
+<li><a href="https://www.gitbook.com/book/dwqs/frontenddevhandbook/details" target="_blank" rel="external">前端开发者手册</a></li>
+<li><a href="https://www.gitbook.com/book/leohxj/front-end-database/details" target="_blank" rel="external">前端工程师手册</a></li>
+<li><a href="https://github.com/wizardforcel/w3school" target="_blank" rel="external">w3school教程整理</a></li>
+<li><a href="http://man.lupaworld.com/content/network/wireshark/index.html" target="_blank" rel="external">Wireshark用户手册</a></li>
+<li><a href="https://community.emc.com/thread/194901" target="_blank" rel="external">一站式学习Wireshark</a></li>
+<li><a href="http://happypeter.github.io/tealeaf-http/" target="_blank" rel="external">HTTP 下午茶</a></li>
+<li><a href="http://yuedu.baidu.com/ebook/478d1a62376baf1ffc4fad99?pn=1" target="_blank" rel="external">HTTP/2.0 中文翻译</a></li>
+<li><a href="https://github.com/abbshr/rfc7540-translation-zh_cn" target="_blank" rel="external">RFC 7540 - HTTP/2 中文翻译版</a></li>
+<li><a href="https://www.gitbook.com/book/ye11ow/http2-explained/details" target="_blank" rel="external">http2讲解</a></li>
+<li><a href="https://www.gitbook.com/book/juntao/3-web-designs-in-3-weeks/details" target="_blank" rel="external">3 Web Designs in 3 Weeks</a></li>
+<li><a href="https://github.com/hellorocky/Site-Reliability-Engineering" target="_blank" rel="external">站点可靠性工程</a></li>
+</ul>
+<h3 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h3><ul>
+<li><a href="https://github.com/Flowerowl/Big-Data-Resources" target="_blank" rel="external">大数据/数据挖掘/推荐系统/机器学习相关资源</a></li>
+<li><a href="https://github.com/egrcc/guidetodatamining" target="_blank" rel="external">面向程序员的数据挖掘指南</a></li>
+<li><a href="https://code.csdn.net/CODE_Translation/spark_matei_phd" target="_blank" rel="external">大型集群上的快速和通用数据处理架构</a></li>
+<li><a href="https://github.com/linyiqun/DataMiningAlgorithm" target="_blank" rel="external">数据挖掘中经典的算法实现和详细的注释</a></li>
+<li><a href="https://aiyanbo.gitbooks.io/spark-programming-guide-zh-cn/content/" target="_blank" rel="external">Spark 编程指南简体中文版</a></li>
+</ul>
+<h2 id="编程艺术"><a href="#编程艺术" class="headerlink" title="编程艺术"></a>编程艺术</h2><ul>
+<li><a href="https://github.com/julycoding/The-Art-Of-Programming-by-July" target="_blank" rel="external">程序员编程艺术</a></li>
+<li><a href="http://www.oschina.net/translate/what-every-programmer-should-know-about-memory-part1?print" target="_blank" rel="external">每个程序员都应该了解的内存知识(译)</a>【第一部分】</li>
+<li><a href="http://read.douban.com/ebook/4972883/" target="_blank" rel="external">取悦的工序：如何理解游戏</a> (豆瓣阅读，免费书籍)</li>
+</ul>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
+<li><a href="https://www.gitbook.com/book/softwaredownload/openwrt-fanqiang/details" target="_blank" rel="external">OpenWrt智能、自动、透明翻墙路由器教程</a></li>
+<li><a href="https://community.emc.com/docs/DOC-16067" target="_blank" rel="external">SAN 管理入门系列</a></li>
+<li><a href="http://sketchcn.com/sketch-chinese-user-manual.html#introduce" target="_blank" rel="external">Sketch 中文手册</a></li>
+<li><a href="http://ifeve.com/perfbook/" target="_blank" rel="external">深入理解并行编程</a></li>
+<li><a href="http://www.kancloud.cn/kancloud/a-programmer-prepares" target="_blank" rel="external">程序员的自我修养</a></li>
+<li><a href="https://github.com/phodal/growth-ebook" target="_blank" rel="external">Growth: 全栈增长工程师指南</a></li>
+</ul>
+<h2 id="语言相关类"><a href="#语言相关类" class="headerlink" title="语言相关类"></a>语言相关类</h2><h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><ul>
+<li><a href="http://www.apkbus.com/design/index.html" target="_blank" rel="external">Android Design(中文版)</a></li>
+<li>Google Material Design 正體中文版 (<a href="https://wcc723.gitbooks.io/google_design_translate/content/style-icons.html" target="_blank" rel="external">译本一</a> <a href="https://github.com/1sters/material_design_zh" target="_blank" rel="external">译本二</a>)</li>
+<li><a href="http://wiki.jikexueyuan.com/project/material-design/" target="_blank" rel="external">Material Design 中文版</a></li>
+<li><a href="http://hukai.me/android-training-course-in-chinese/index.html" target="_blank" rel="external">Google Android官方培训课程中文版</a></li>
+<li><a href="http://www.stormzhang.com/android/2014/07/07/learn-android-from-rookie/" target="_blank" rel="external">Android学习之路</a></li>
+<li><a href="https://github.com/bboyfeiyu/android-tech-frontier" target="_blank" rel="external">Android开发技术前线(android-tech-frontier)</a></li>
+<li><a href="https://github.com/FX-Max/Point-of-Android" target="_blank" rel="external">Point-of-Android</a> Android 一些重要知识点解析整理</li>
+<li><a href="http://leanote.com/blog/post/561658f938f41126b2000298?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">Android6.0新特性详解</a></li>
+</ul>
+<h3 id="APP"><a href="#APP" class="headerlink" title="APP"></a>APP</h3><ul>
+<li><a href="https://github.com/waylau/cordova-dev-guide" target="_blank" rel="external">Apache Cordova 开发指南</a></li>
+</ul>
+<h3 id="AWK"><a href="#AWK" class="headerlink" title="AWK"></a>AWK</h3><ul>
+<li><a href="https://github.com/wuzhouhui/awk" target="_blank" rel="external">awk程序设计语言</a></li>
+<li><a href="http://awk.readthedocs.org/en/latest/index.html" target="_blank" rel="external">awk中文指南</a></li>
+</ul>
+<h3 id="C-C"><a href="#C-C" class="headerlink" title="C/C++"></a>C/C++</h3><ul>
+<li><a href="http://zh.cppreference.com/" target="_blank" rel="external">C/C++ 中文参考手册</a> (欢迎大家参与在线翻译和校对)</li>
+<li><a href="https://www.gitbook.com/book/tinylab/cbook/details" target="_blank" rel="external">C 语言编程透视</a></li>
+<li><a href="https://github.com/forhappy/Cplusplus-Concurrency-In-Practice" target="_blank" rel="external">C++ 并发编程指南</a></li>
+<li><a href="http://akaedu.github.io/book/" target="_blank" rel="external">Linux C编程一站式学习</a> (宋劲杉, 北京亚嵌教育研究中心)</li>
+<li><a href="https://github.com/leeyiw/cgdb-manual-in-chinese" target="_blank" rel="external">CGDB中文手册</a></li>
+<li><a href="https://github.com/hellogcc/100-gdb-tips/blob/master/src/index.md" target="_blank" rel="external">100个gdb小技巧</a></li>
+<li><a href="https://github.com/hellogcc/100-gcc-tips/blob/master/src/index.md" target="_blank" rel="external">100个gcc小技巧</a></li>
+<li><a href="https://github.com/anjuke/zguide-cn" target="_blank" rel="external">ZMQ 指南</a></li>
+<li><a href="http://www.ituring.com.cn/book/1203" target="_blank" rel="external">How to Think Like a Computer Scientist</a> (中英文版)</li>
+<li><a href="http://scc.qibebt.cas.cn/docs/linux/base/%B8%FA%CE%D2%D2%BB%C6%F0%D0%B4Makefile-%B3%C2%F0%A9.pdf" target="_blank" rel="external">跟我一起写Makefile(PDF)</a></li>
+<li><a href="http://www.yayu.org/book/gnu_make/" target="_blank" rel="external">GNU make中文手册</a></li>
+<li><a href="http://docs.huihoo.com/gnu/linux/gmake.html" target="_blank" rel="external">GNU make 指南</a></li>
+<li><a href="http://zh-google-styleguide.readthedocs.org/en/latest/google-cpp-styleguide/contents/" target="_blank" rel="external">Google C++ 风格指南</a></li>
+<li><a href="https://github.com/andycai/cprimer" target="_blank" rel="external">C/C++ Primer</a> (by @andycai)</li>
+<li><a href="http://www.nowamagic.net/librarys/books/contents/c" target="_blank" rel="external">简单易懂的C魔法</a></li>
+<li><a href="http://sewm.pku.edu.cn/src/paradise/reference/CMake%20Practice.pdf" target="_blank" rel="external">Cmake 实践</a> (PDF版)</li>
+<li><a href="http://www.sunistudio.com/cppfaq/" target="_blank" rel="external">C++ FAQ LITE(中文版)</a></li>
+<li><a href="https://github.com/Mooophy/Cpp-Primer" target="_blank" rel="external">C++ Primer 5th Answers</a></li>
+<li><a href="https://www.gitbook.com/book/chenxiaowei/cpp_concurrency_in_action/details" target="_blank" rel="external">C++ 并发编程(基于C++11)</a></li>
+<li><a href="http://www.kuqin.com/qtdocument/tutorial.html" target="_blank" rel="external">QT 教程</a></li>
+<li><a href="http://www.devbean.net/category/qt-study-road-2/" target="_blank" rel="external">DevBean的《Qt学习之路2》(Qt5)</a></li>
+<li><a href="https://github.com/wuye9036/CppTemplateTutorial" target="_blank" rel="external">C++ Template 进阶指南</a></li>
+<li><a href="https://github.com/luohaha/Chinese-uvbook" target="_blank" rel="external">libuv中文教程</a></li>
+<li><a href="http://zh.highscore.de/cpp/boost/" target="_blank" rel="external">Boost 库中文教程</a></li>
+<li><a href="https://github.com/wizardforcel/lcthw-zh" target="_blank" rel="external">笨办法学C</a></li>
+</ul>
+<h3 id="C-35"><a href="#C-35" class="headerlink" title="C&#35;"></a>C&#35;</h3><ul>
+<li><a href="https://msdn.microsoft.com/zh-cn/library/kx37x362.aspx" target="_blank" rel="external">MSDN C# 中文文档</a></li>
+<li><a href="https://msdn.microsoft.com/zh-cn/library/gg145045.aspx" target="_blank" rel="external">.NET 类库参考</a></li>
+<li><a href="http://www.cnblogs.com/powertoolsteam/p/aspnetmvc5-tutorials-grapecity.html" target="_blank" rel="external">ASP.NET MVC 5 入门指南</a></li>
+<li><a href="http://www.cnblogs.com/LonelyShadow/p/4162318.html" target="_blank" rel="external">超全面的 .NET GDI+ 图形图像编程教程</a></li>
+<li><a href="https://github.com/JackWangCUMT/customcontrol" target="_blank" rel="external">.NET控件开发基础</a></li>
+<li><a href="https://github.com/sherlockchou86/-free-ebook-.NET-" target="_blank" rel="external">.NET开发要点精讲（初稿）</a></li>
+</ul>
+<h3 id="Clojure"><a href="#Clojure" class="headerlink" title="Clojure"></a>Clojure</h3><ul>
+<li><a href="http://xumingming.sinaapp.com/302/clojure-functional-programming-for-the-jvm-clojure-tutorial/" target="_blank" rel="external">Clojure入门教程</a></li>
+</ul>
+<h3 id="CSS-HTML"><a href="#CSS-HTML" class="headerlink" title="CSS/HTML"></a>CSS/HTML</h3><ul>
+<li><a href="http://zh.learnlayout.com/" target="_blank" rel="external">学习CSS布局</a></li>
+<li><a href="https://github.com/chadluo/CSS-Guidelines/blob/master/README.md" target="_blank" rel="external">通用 CSS 笔记、建议与指导</a></li>
+<li><a href="http://css.doyoe.com/" target="_blank" rel="external">CSS参考手册</a></li>
+<li><a href="http://yanxyz.github.io/emmet-docs/" target="_blank" rel="external">Emmet 文档</a></li>
+<li><a href="http://alloyteam.github.io/CodeGuide/" target="_blank" rel="external">前端代码规范</a> (腾讯 AlloyTeam 团队)</li>
+<li><a href="http://codeguide.bootcss.com/" target="_blank" rel="external">HTML和CSS编码规范</a></li>
+<li><a href="http://sass-guidelin.es/zh/" target="_blank" rel="external">Sass Guidelines 中文</a></li>
+<li><a href="https://github.com/waylau/css3-tutorial" target="_blank" rel="external">CSS3 Tutorial 《CSS3 教程》</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML" target="_blank" rel="external">MDN HTML 中文文档</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS" target="_blank" rel="external">MDN CSS 中文文档</a></li>
+</ul>
+<h3 id="Dart"><a href="#Dart" class="headerlink" title="Dart"></a>Dart</h3><ul>
+<li><a href="http://dart.lidian.info/wiki/Language_Tour" target="_blank" rel="external">Dart 语言导览</a></li>
+</ul>
+<h3 id="Elixir"><a href="#Elixir" class="headerlink" title="Elixir"></a>Elixir</h3><ul>
+<li><a href="https://github.com/straightdave/programming_elixir" target="_blank" rel="external">Elixir编程入门</a></li>
+</ul>
+<h3 id="Erlang"><a href="#Erlang" class="headerlink" title="Erlang"></a>Erlang</h3><ul>
+<li><a href="http://xn--21erlang-p00o82pmp3o.github.io/" target="_blank" rel="external">21天学通Erlang</a></li>
+</ul>
+<h3 id="Fortran"><a href="#Fortran" class="headerlink" title="Fortran"></a>Fortran</h3><ul>
+<li><a href="http://micro.ustc.edu.cn/Fortran/ZJDing/" target="_blank" rel="external">Fortran77和90/95编程入门</a></li>
+</ul>
+<h3 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h3><ul>
+<li><a href="https://github.com/Unknwon/go-fundamental-programming" target="_blank" rel="external">Go编程基础</a></li>
+<li><a href="https://github.com/Unknwon/the-way-to-go_ZH_CN" target="_blank" rel="external">Go入门指南</a></li>
+<li><a href="http://mikespook.com/learning-go/" target="_blank" rel="external">学习Go语言</a></li>
+<li><a href="https://github.com/astaxie/build-web-application-with-golang" target="_blank" rel="external">Go Web 编程</a> (此书已经出版，希望开发者们去购买，支持作者的创作)</li>
+<li><a href="https://github.com/astaxie/Go-in-Action" target="_blank" rel="external">Go实战开发</a> (当我收录此项目时，作者已经写完第三章，如果读完前面章节觉得有帮助，可以给作者<a href="https://me.alipay.com/astaxie" target="_blank" rel="external">捐赠</a>，以鼓励作者的继续创作)</li>
+<li><a href="https://github.com/astaxie/NPWG_zh" target="_blank" rel="external">Network programming with Go 中文翻译版本</a></li>
+<li><a href="http://www.hellogcc.org/effective_go.html" target="_blank" rel="external">Effective Go</a></li>
+<li><a href="https://github.com/polaris1119/The-Golang-Standard-Library-by-Example" target="_blank" rel="external">Go 语言标准库</a></li>
+<li><a href="http://godoc.ml/" target="_blank" rel="external">Golang标准库文档</a></li>
+<li><a href="http://gorevel.cn/docs/manual/index.html" target="_blank" rel="external">Revel 框架手册</a></li>
+<li><a href="http://blog.csdn.net/dc_726/article/details/46565241" target="_blank" rel="external">Java程序员的Golang入门指南</a></li>
+<li><a href="https://github.com/hyper-carrot/go_command_tutorial" target="_blank" rel="external">Go命令教程</a></li>
+<li><a href="https://github.com/achun/Go-Blog-In-Action" target="_blank" rel="external">Go语言博客实践</a></li>
+<li><a href="https://github.com/golang-china/golangdoc.translations" target="_blank" rel="external">Go 官方文档翻译</a></li>
+<li><a href="https://github.com/tiancaiamao/go-internals" target="_blank" rel="external">深入解析Go</a></li>
+<li><a href="https://bitbucket.org/golang-china/gopl-zh/wiki/Home" target="_blank" rel="external">Go语言圣经(中文版)</a> (<a href="https://www.gitbook.com/book/wizardforcel/gopl-zh/details" target="_blank" rel="external">GitBook</a>)</li>
+</ul>
+<h3 id="Groovy"><a href="#Groovy" class="headerlink" title="Groovy"></a>Groovy</h3><ul>
+<li><a href="http://www.ibm.com/developerworks/cn/java/j-pg/" target="_blank" rel="external">实战 Groovy 系列</a></li>
+</ul>
+<h3 id="Haskell"><a href="#Haskell" class="headerlink" title="Haskell"></a>Haskell</h3><ul>
+<li><a href="http://rwh.readthedocs.org/en/latest/" target="_blank" rel="external">Real World Haskell 中文版</a></li>
+<li><a href="http://fleurer-lee.com/lyah/" target="_blank" rel="external">Haskell趣学指南</a></li>
+</ul>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><ul>
+<li><a href="https://github.com/qinjx/30min_guides/blob/master/ios.md" target="_blank" rel="external">iOS开发60分钟入门</a></li>
+<li><a href="http://isux.tencent.com/ios-human-interface-guidelines-ui-design-basics-ios7.html" target="_blank" rel="external">iOS7人机界面指南</a></li>
+<li><a href="http://zh-google-styleguide.readthedocs.org/en/latest/google-objc-styleguide/" target="_blank" rel="external">Google Objective-C Style Guide 中文版</a></li>
+<li><a href="http://wileam.com/iphone-6-screen-cn/" target="_blank" rel="external">iPhone 6 屏幕揭秘</a></li>
+<li><a href="http://nilsun.github.io/apple-watch/" target="_blank" rel="external">Apple Watch开发初探</a></li>
+<li><a href="https://developer.apple.com/library/ios/referencelibrary/GettingStarted/RoadMapiOSCh/index.html" target="_blank" rel="external">马上着手开发 iOS 应用程序</a></li>
+<li><a href="https://github.com/jkyin/Subtitle" target="_blank" rel="external">网易斯坦福大学公开课：iOS 7应用开发字幕文件</a></li>
+</ul>
+<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><ul>
+<li><a href="https://github.com/waylau/apache-shiro-1.2.x-reference" target="_blank" rel="external">Apache Shiro 用户指南</a></li>
+<li><a href="https://github.com/waylau/Jersey-2.x-User-Guide" target="_blank" rel="external">Jersey 2.x 用户指南</a></li>
+<li><a href="https://github.com/waylau/spring-framework-4-reference" target="_blank" rel="external">Spring Framework 4.x参考文档</a></li>
+<li><a href="https://github.com/qibaoguang/Spring-Boot-Reference-Guide" target="_blank" rel="external">Spring Boot参考指南</a> (翻译中)</li>
+<li><a href="http://mybatis.org/mybatis-3/zh/index.html" target="_blank" rel="external">MyBatis中文文档</a></li>
+<li><a href="http://mbg.cndocs.tk/" target="_blank" rel="external">MyBatis Generator 中文文档</a></li>
+<li><a href="https://github.com/waylau/RestDemo" target="_blank" rel="external">用jersey构建REST服务</a></li>
+<li><a href="https://github.com/waylau/activiti-5.x-user-guide" target="_blank" rel="external">Activiti 5.x 用户指南</a></li>
+<li><a href="http://www.hawstein.com/posts/google-java-style.html" target="_blank" rel="external">Google Java编程风格指南</a></li>
+<li><a href="https://github.com/waylau/netty-4-user-guide" target="_blank" rel="external">Netty 4.x 用户指南</a></li>
+<li><a href="https://github.com/waylau/essential-netty-in-action" target="_blank" rel="external">Netty 实战(精髓)</a></li>
+<li><a href="https://github.com/waylau/rest-in-action" target="_blank" rel="external">REST 实战</a></li>
+<li><a href="https://github.com/waylau/java-code-conventions" target="_blank" rel="external">Java 编码规范</a></li>
+<li><a href="https://github.com/waylau/apache-mina-2.x-user-guide" target="_blank" rel="external">Apache MINA 2 用户指南</a></li>
+<li><a href="https://github.com/waylau/h2-database-doc" target="_blank" rel="external">H2 Database 教程</a></li>
+<li><a href="https://github.com/waylau/servlet-3.1-specification" target="_blank" rel="external">Java Servlet 3.1 规范</a></li>
+<li><a href="https://github.com/waylau/jsse-reference-guide" target="_blank" rel="external">JSSE 参考指南</a></li>
+<li><a href="https://github.com/biezhi/jb" target="_blank" rel="external">Java开源实现及最佳实践</a></li>
+<li><a href="https://github.com/waylau/essential-java" target="_blank" rel="external">Java 编程要点</a></li>
+<li><a href="http://www.ituring.com.cn/minibook/69" target="_blank" rel="external">Think Java</a></li>
+<li><a href="https://github.com/wizardforcel/modern-java-zh" target="_blank" rel="external">Java 8 简明教程</a></li>
+</ul>
+<h3 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h3><ul>
+<li><a href="http://bq69.com/blog/articles/script/868/google-javascript-style-guide.html" target="_blank" rel="external">Google JavaScript 代码风格指南</a></li>
+<li><a href="https://github.com/darcyliu/google-styleguide/blob/master/JSONStyleGuide.md" target="_blank" rel="external">Google JSON 风格指南</a></li>
+<li><a href="https://github.com/adamlu/javascript-style-guide" target="_blank" rel="external">Airbnb JavaScript 规范</a></li>
+<li><a href="http://javascript.ruanyifeng.com/" target="_blank" rel="external">JavaScript 标准参考教程（alpha）</a></li>
+<li><a href="http://pij.robinqu.me/" target="_blank" rel="external">Javascript编程指南</a> (<a href="https://github.com/RobinQu/Programing-In-Javascript" target="_blank" rel="external">源码</a>)</li>
+<li><a href="https://github.com/justjavac/12-javascript-quirks" target="_blank" rel="external">javascript 的 12 个怪癖</a></li>
+<li><a href="http://bonsaiden.github.io/JavaScript-Garden/zh/" target="_blank" rel="external">JavaScript 秘密花园</a></li>
+<li><a href="http://icodeit.org/jsccp/" target="_blank" rel="external">JavaScript核心概念及实践</a> (PDF) (此书已由人民邮电出版社出版发行，但作者依然免费提供PDF版本，希望开发者们去购买，支持作者)</li>
+<li><a href="https://github.com/jayli/javascript-patterns" target="_blank" rel="external">《JavaScript 模式》</a> “JavaScript patterns”中译本</li>
+<li><a href="http://justjavac.com/named-function-expressions-demystified.html" target="_blank" rel="external">命名函数表达式探秘</a>  (注:原文由<a href="http://www.cn-cuckoo.com" target="_blank" rel="external">为之漫笔</a>翻译，原始地址无法打开，所以此处地址为我博客上的备份)</li>
+<li><a href="http://www.oschina.net/translate/learning-javascript-design-patterns" target="_blank" rel="external">学用 JavaScript 设计模式</a> (开源中国)</li>
+<li><a href="http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html" target="_blank" rel="external">深入理解JavaScript系列</a>   </li>
+<li><a href="http://yanhaijing.com/es5" target="_blank" rel="external">ECMAScript 5.1 中文版</a>   </li>
+<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="external">ECMAScript 6 入门</a> (作者：阮一峰)</li>
+<li><a href="http://liubin.github.io/promises-book/" target="_blank" rel="external">JavaScript Promise迷你书</a></li>
+<li><a href="https://github.com/getify/You-Dont-Know-JS" target="_blank" rel="external">You-Dont-Know-JS</a> (深入JavaScript语言核心机制的系列图书)</li>
+<li><a href="http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000" target="_blank" rel="external">JavaScript 教程</a> 廖雪峰</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript" target="_blank" rel="external">MDN JavaScript 中文文档</a></li>
+<li>jQuery<ul>
+<li><a href="http://www.cn-cuckoo.com/deconstructed/jquery.html" target="_blank" rel="external">jQuery 解构</a></li>
+<li><a href="http://www.nowamagic.net/librarys/books/contents/jquery" target="_blank" rel="external">简单易懂的JQuery魔法</a></li>
+<li><a href="http://i5ting.github.io/How-to-write-jQuery-plugin/build/jquery.plugin.html" target="_blank" rel="external">How to write jQuery plugin</a></li>
+<li><a href="https://github.com/oneuijs/You-Dont-Need-jQuery/blob/master/README.zh-CN.md" target="_blank" rel="external">You Don’t Need jQuery</a></li>
+<li><a href="https://github.com/MeCKodo/forchange" target="_blank" rel="external">如何实现一个类jQuery？</a></li>
+</ul>
+</li>
+<li>Node.js<ul>
+<li><a href="http://www.nodebeginner.org/index-zh-cn.html" target="_blank" rel="external">Node入门</a></li>
+<li><a href="http://nqdeng.github.io/7-days-nodejs/" target="_blank" rel="external">七天学会NodeJS</a></li>
+<li><a href="https://github.com/nodejs-tw/nodejs-wiki-book" target="_blank" rel="external">Nodejs Wiki Book</a> (繁体中文)</li>
+<li><a href="http://expressjs.jser.us/" target="_blank" rel="external">express.js 中文文档</a></li>
+<li><a href="https://github.com/guo-yu/koa-guide" target="_blank" rel="external">koa 中文文档</a></li>
+<li><a href="http://base-n.github.io/koa-generator-examples/" target="_blank" rel="external">一起学koa</a></li>
+<li><a href="https://github.com/nswbmw/N-blog" target="_blank" rel="external">使用 Express + MongoDB 搭建多人博客</a></li>
+<li><a href="http://javascript.ruanyifeng.com/nodejs/express.html" target="_blank" rel="external">Express框架</a></li>
+<li><a href="https://github.com/alsotang/node-lessons" target="_blank" rel="external">Node.js 包教不包会</a></li>
+<li><a href="https://www.npmjs.com/package/learnyounode-zh-cn" target="_blank" rel="external">Learn You The Node.js For Much Win! (中文版)</a></li>
+<li><a href="http://i5ting.github.io/node-debug-tutorial/" target="_blank" rel="external">Node debug 三法三例</a></li>
+<li><a href="https://www.gitbook.com/book/0532/nodejs/details" target="_blank" rel="external">nodejs中文文档</a></li>
+<li><a href="https://github.com/wizardforcel/orm2-doc-zh-cn" target="_blank" rel="external">orm2 中文文档</a></li>
+</ul>
+</li>
+<li>underscore.js<ul>
+<li><a href="http://learningcn.com/underscore/" target="_blank" rel="external">Underscore.js中文文档</a></li>
+</ul>
+</li>
+<li>backbone.js<ul>
+<li><a href="http://www.css88.com/doc/backbone/" target="_blank" rel="external">backbone.js中文文档</a></li>
+<li><a href="http://www.the5fire.com/backbone-js-tutorials-pdf-download.html" target="_blank" rel="external">backbone.js入门教程</a> (PDF)</li>
+<li><a href="https://github.com/the5fire/backbonejs-learning-note" target="_blank" rel="external">Backbone.js入门教程第二版</a></li>
+<li><a href="http://feliving.github.io/developing-backbone-applications/" target="_blank" rel="external">Developing Backbone.js Applications(中文版)</a></li>
+</ul>
+</li>
+<li>AngularJS<ul>
+<li><a href="https://github.com/mgechev/angularjs-style-guide/blob/master/README-zh-cn.md" target="_blank" rel="external">AngularJS最佳实践和风格指南</a></li>
+<li><a href="https://github.com/peiransun/angularjs-cn" target="_blank" rel="external">AngularJS中译本</a></li>
+<li><a href="https://github.com/zensh/AngularjsTutorial_cn" target="_blank" rel="external">AngularJS入门教程</a></li>
+<li><a href="https://github.com/xufei/Make-Your-Own-AngularJS/blob/master/01.md" target="_blank" rel="external">构建自己的AngularJS</a></li>
+<li><a href="http://www.waylau.com/build-angularjs-app-with-yeoman-in-windows/" target="_blank" rel="external">在Windows环境下用Yeoman构建AngularJS项目</a></li>
+</ul>
+</li>
+<li>Zepto.js<ul>
+<li><a href="http://mweb.baidu.com/zeptoapi/" target="_blank" rel="external">Zepto.js 中文文档</a></li>
+</ul>
+</li>
+<li>Sea.js<ul>
+<li><a href="http://island205.com/HelloSea.js/" target="_blank" rel="external">Hello Sea.js</a></li>
+</ul>
+</li>
+<li>React.js<ul>
+<li><a href="http://reactjs.cn/" target="_blank" rel="external">React.js 中文文档</a></li>
+<li><a href="https://github.com/fakefish/react-webpack-cookbook" target="_blank" rel="external">React webpack-cookbook</a></li>
+<li><a href="http://fraserxu.me/intro-to-react/" target="_blank" rel="external">React 入门教程</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/react-native/" target="_blank" rel="external">React Native 中文文档(含最新Android内容)</a></li>
+<li><a href="https://github.com/theJian/build-a-hn-front-page" target="_blank" rel="external">Learn React &amp; Webpack by building the Hacker News front page</a></li>
+</ul>
+</li>
+<li>impress.js<ul>
+<li><a href="https://github.com/kokdemo/impress.js-tutorial-in-Chinese" target="_blank" rel="external">impress.js的中文教程</a></li>
+</ul>
+</li>
+<li>CoffeeScript<ul>
+<li><a href="http://island205.com/coffeescript-cookbook.github.com/" target="_blank" rel="external">CoffeeScript Cookbook</a></li>
+<li><a href="http://island205.com/tlboc/" target="_blank" rel="external">The Little Book on CoffeeScript中文版</a></li>
+<li><a href="https://github.com/geekplux/coffeescript-style-guide" target="_blank" rel="external">CoffeeScript 编码风格指南</a></li>
+</ul>
+</li>
+<li>TypeScipt<ul>
+<li><a href="https://zhongsp.gitbooks.io/typescript-handbook/content/" target="_blank" rel="external">TypeScript Handbook</a></li>
+</ul>
+</li>
+<li>ExtJS<ul>
+<li><a href="http://extjs-doc-cn.github.io/ext4api/" target="_blank" rel="external">Ext4.1.0 中文文档</a></li>
+</ul>
+</li>
+<li>Meteor<ul>
+<li><a href="http://zh.discovermeteor.com/" target="_blank" rel="external">Discover Meteor</a></li>
+<li><a href="http://docs.meteorhub.org/#/basic/" target="_blank" rel="external">Meteor 中文文档</a></li>
+<li><a href="http://angular.meteorhub.org/" target="_blank" rel="external">Angular-Meteor 中文教程</a></li>
+</ul>
+</li>
+<li><a href="http://www.ituring.com.cn/minibook/950" target="_blank" rel="external">Chrome扩展及应用开发</a></li>
+</ul>
+<h3 id="LaTeX"><a href="#LaTeX" class="headerlink" title="LaTeX"></a>LaTeX</h3><ul>
+<li><a href="http://liam0205.me/2014/09/08/latex-introduction/" target="_blank" rel="external">一份其实很短的 LaTeX 入门文档</a></li>
+<li><a href="http://www.mohu.org/info/lshort-cn.pdf" target="_blank" rel="external">一份不太简短的 LATEX 2ε 介绍</a> （PDF版）</li>
+</ul>
+<h3 id="LISP"><a href="#LISP" class="headerlink" title="LISP"></a>LISP</h3><ul>
+<li>Common Lisp<ul>
+<li><a href="http://acl.readthedocs.org/en/latest/" target="_blank" rel="external">ANSI Common Lisp 中文翻譯版</a></li>
+<li><a href="http://www.ituring.com.cn/minibook/862" target="_blank" rel="external">On Lisp 中文翻译版本</a></li>
+</ul>
+</li>
+<li>Scheme<ul>
+<li><a href="http://deathking.github.io/yast-cn/" target="_blank" rel="external">Yet Another Scheme Tutorial Scheme入门教程</a></li>
+<li><a href="http://songjinghe.github.io/TYS-zh-translation/" target="_blank" rel="external">Scheme语言简明教程</a></li>
+<li>Racket<ul>
+<li><a href="https://github.com/tyrchen/racket-book" target="_blank" rel="external">Racket book</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Lua"><a href="#Lua" class="headerlink" title="Lua"></a>Lua</h3><ul>
+<li><a href="https://github.com/andycai/luaprimer" target="_blank" rel="external">Lua编程入门</a></li>
+<li><a href="http://www.codingnow.com/2000/download/lua_manual.html" target="_blank" rel="external">Lua 5.1 参考手册 中文翻译</a></li>
+<li><a href="http://cloudwu.github.io/lua53doc/" target="_blank" rel="external">Lua 5.3 参考手册 中文翻译</a></li>
+<li><a href="http://www.codingnow.com/temp/readinglua.pdf" target="_blank" rel="external">Lua源码欣赏</a></li>
+</ul>
+<h3 id="OCaml"><a href="#OCaml" class="headerlink" title="OCaml"></a>OCaml</h3><ul>
+<li><a href="https://github.com/zforget/translation/tree/master/real_world_ocaml" target="_blank" rel="external">Real World OCaml</a></li>
+</ul>
+<h3 id="Perl"><a href="#Perl" class="headerlink" title="Perl"></a>Perl</h3><ul>
+<li><a href="https://github.com/horus/modern_perl_book" target="_blank" rel="external">Modern Perl 中文版</a></li>
+<li><a href="http://perl.linuxtoy.org/" target="_blank" rel="external">Perl 程序员应该知道的事</a></li>
+</ul>
+<h3 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h3><ul>
+<li><a href="http://php.net/manual/zh/" target="_blank" rel="external">PHP 官方手册</a></li>
+<li><a href="http://www.laruence.com/2010/06/21/1608.html" target="_blank" rel="external">PHP调试技术手册</a>(PDF)</li>
+<li>PHP之道：php-the-right-way (<a href="http://wulijun.github.io/php-the-right-way/" target="_blank" rel="external">@wulijun版</a> <a href="http://laravel-china.github.io/php-the-right-way/" target="_blank" rel="external">PHPHub版</a>)</li>
+<li><a href="https://github.com/justjavac/PHP-Best-Practices-zh_CN" target="_blank" rel="external">PHP 最佳实践</a></li>
+<li><a href="https://ryancao.gitbooks.io/php-developer-prepares/content/" target="_blank" rel="external">PHP 开发者实践</a></li>
+<li><a href="https://github.com/reeze/tipi" target="_blank" rel="external">深入理解PHP内核</a></li>
+<li><a href="http://www.walu.cc/phpbook/" target="_blank" rel="external">PHP扩展开发及内核应用</a></li>
+<li><a href="http://laravel-china.org/docs/5.1" target="_blank" rel="external">Laravel5.1 中文文档</a></li>
+<li><a href="https://cs.phphub.org/" target="_blank" rel="external">Laravel 5.1 LTS 速查表</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/symfony-cookbook/" target="_blank" rel="external">Symfony2 Cookbook 中文版</a>(版本 2.7.0 LTS)</li>
+<li><a href="http://symfony-docs-chs.readthedocs.org/en/latest/" target="_blank" rel="external">Symfony2中文文档</a> (未译完)</li>
+<li><a href="http://yiibook.com//doc" target="_blank" rel="external">YiiBook几本Yii框架的在线教程</a></li>
+<li><a href="http://www.digpage.com/" target="_blank" rel="external">深入理解 Yii 2.0</a></li>
+<li><a href="http://www.yiichina.com/" target="_blank" rel="external">Yii 框架中文文檔</a></li>
+<li><a href="http://www.nowamagic.net/librarys/books/contents/php" target="_blank" rel="external">简单易懂的PHP魔法</a></li>
+<li><a href="https://github.com/LinkedDestiny/swoole-doc" target="_blank" rel="external">swoole文档及入门教程</a></li>
+<li><a href="http://www.phpcomposer.com" target="_blank" rel="external">Composer 中文网</a></li>
+<li><a href="http://ww1.minimee.org/php/slim" target="_blank" rel="external">Slim 中文文档</a></li>
+<li><a href="http://lumen.laravel-china.org/" target="_blank" rel="external">Lumen 中文文档</a></li>
+<li><a href="https://phpunit.de/manual/current/zh_cn/installation.html" target="_blank" rel="external">PHPUnit 中文文档</a></li>
+</ul>
+<h3 id="Prolog"><a href="#Prolog" class="headerlink" title="Prolog"></a>Prolog</h3><ul>
+<li><a href="http://fengdidi.github.io/blog/2011/11/15/qian-yan/" target="_blank" rel="external">笨办法学Prolog</a></li>
+</ul>
+<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><ul>
+<li><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000" target="_blank" rel="external">廖雪峰 Python 2.7 中文教程</a></li>
+<li><a href="http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" target="_blank" rel="external">廖雪峰 Python 3 中文教程</a></li>
+<li><a href="http://www.kuqin.com/abyteofpython_cn/" target="_blank" rel="external">简明Python教程</a></li>
+<li><a href="http://www.kancloud.cn/kancloud/python-basic" target="_blank" rel="external">零基础学 Python 第一版</a></li>
+<li><a href="http://www.kancloud.cn/kancloud/starter-learning-python" target="_blank" rel="external">零基础学 Python 第二版</a></li>
+<li><a href="http://lovelypython.readthedocs.org/en/latest/" target="_blank" rel="external">可爱的 Python</a></li>
+<li><a href="http://www.pythondoc.com/pythontutorial27/index.html" target="_blank" rel="external">Python 2.7 官方教程中文版</a></li>
+<li><a href="http://www.pythondoc.com/pythontutorial3/index.html" target="_blank" rel="external">Python 3.3 官方教程中文版</a></li>
+<li><a href="http://www.kancloud.cn/thinkphp/python-cookbook" target="_blank" rel="external">Python Cookbook 中文版</a></li>
+<li><a href="https://github.com/yidao620c/python3-cookbook" target="_blank" rel="external">Python3 Cookbook 中文版</a></li>
+<li><a href="http://www.kuqin.com/docs/diveintopythonzh-cn-5.4b/html/toc/" target="_blank" rel="external">深入 Python</a></li>
+<li><a href="http://old.sebug.net/paper/books/dive-into-python3/" target="_blank" rel="external">深入 Python 3</a></li>
+<li><a href="https://code.google.com/p/zhong-wiki/wiki/PEP8" target="_blank" rel="external">PEP8 Python代码风格规范</a></li>
+<li><a href="http://zh-google-styleguide.readthedocs.org/en/latest/google-python-styleguide/" target="_blank" rel="external">Google Python 风格指南 中文版</a></li>
+<li><a href="http://liam0205.me/2013/11/02/Python-tutorial-zh_cn/" target="_blank" rel="external">Python入门教程</a> (<a href="http://liam0205.me/attachment/Python/The_Python_Tutorial_zh-cn.pdf" target="_blank" rel="external">PDF</a>)</li>
+<li><a href="http://old.sebug.net/paper/books/LearnPythonTheHardWay/" target="_blank" rel="external">笨办法学 Python</a> (<a href="http://liam0205.me/attachment/Python/PyHardWay/Learn_Python_The_Hard_Way_zh-cn.pdf" target="_blank" rel="external">PDF</a> <a href="https://www.gitbook.com/download/epub/book/wizardforcel/lpthw" target="_blank" rel="external">EPUB</a>)</li>
+<li><a href="http://pan.baidu.com/s/1qW4pvnY" target="_blank" rel="external">Python自然语言处理中文版</a> （感谢陈涛同学的翻译，也谢谢 <a href="https://github.com/shwley" target="_blank" rel="external">@shwley</a> 联系了作者）</li>
+<li><a href="http://liam0205.me/2014/09/11/matplotlib-tutorial-zh-cn/" target="_blank" rel="external">Python 绘图库 matplotlib 官方指南中文翻译</a></li>
+<li><a href="http://scrapy-chs.readthedocs.org/zh_CN/latest/" target="_blank" rel="external">Scrapy 0.25 文档</a></li>
+<li><a href="https://github.com/carfly/thinkpython-cn" target="_blank" rel="external">ThinkPython</a></li>
+<li><a href="https://github.com/bingjin/ThinkPython2-CN" target="_blank" rel="external">ThinkPython 2ed</a></li>
+<li><a href="http://www.cnblogs.com/vamei/archive/2012/09/13/2682778.html" target="_blank" rel="external">Python快速教程</a></li>
+<li><a href="http://wiki.ubuntu.org.cn/Python正则表达式操作指南" target="_blank" rel="external">Python 正则表达式操作指南</a></li>
+<li><a href="http://www.crifan.com/files/doc/docbook/python_beginner_tutorial/release/html/python_beginner_tutorial.html" target="_blank" rel="external">python初级教程：入门详解</a></li>
+<li><a href="https://www.gitbook.com/book/likebeta/twisted-intro-cn/details" target="_blank" rel="external">Twisted 与异步编程入门</a></li>
+<li><a href="http://textgrocery.readthedocs.org/zh/latest/index.html" target="_blank" rel="external">TextGrocery 中文 API</a> ( 基于svm算法的一个短文本分类 Python 库 )</li>
+<li><a href="http://requests-docs-cn.readthedocs.org/zh_CN/latest/" target="_blank" rel="external">Requests: HTTP for Humans</a></li>
+<li><a href="http://pillow-cn.readthedocs.org/en/latest/#" target="_blank" rel="external">Pillow 中文文档</a></li>
+<li><a href="http://pymotwcn.readthedocs.org/en/latest/index.html" target="_blank" rel="external">PyMOTW 中文版</a></li>
+<li><a href="http://data.digitser.net/zh-CN/python_index.html" target="_blank" rel="external">Python 官方文档中文版</a></li>
+<li><a href="http://fabric-chs.readthedocs.org" target="_blank" rel="external">Fabric 中文文档</a></li>
+<li><a href="http://beautifulsoup.readthedocs.org/zh_CN/latest/" target="_blank" rel="external">Beautiful Soup 4.2.0 中文文档</a></li>
+<li><a href="http://old.sebug.net/paper/books/scipydoc" target="_blank" rel="external">用Python做科学计算</a></li>
+<li><a href="http://www.pythondoc.com/sphinx/index.html" target="_blank" rel="external">Sphinx 中文文档</a></li>
+<li><a href="https://github.com/cundi/Mastering.Python.Design.Patterns" target="_blank" rel="external">精通 Python 设计模式</a></li>
+<li><a href="https://github.com/smartFlash/pySecurity" target="_blank" rel="external">python 安全编程教程</a></li>
+<li><a href="https://www.gitbook.com/book/wizardforcel/sjtu-cs902-courseware/details" target="_blank" rel="external">程序设计思想与方法</a></li>
+<li><a href="https://read.douban.com/ebook/16691849/" target="_blank" rel="external">知乎周刊·编程小白学Python</a></li>
+<li><a href="https://github.com/cloga/scipy-lecture-notes_cn" target="_blank" rel="external">Scipy 讲义</a></li>
+<li><a href="http://www.kuqin.com/docs/pythonbasic.html" target="_blank" rel="external">Python 学习笔记 基础篇</a></li>
+<li><a href="http://www.kuqin.com/docs/pythonmodule.html" target="_blank" rel="external">Python 学习笔记 模块篇</a></li>
+<li><a href="http://old.sebug.net/paper/books/python/%E3%80%8APython%E6%A0%87%E5%87%86%E5%BA%93%E3%80%8B%E4%B8%AD%E6%96%87%E7%89%88.pdf" target="_blank" rel="external">Python 标准库 中文版</a></li>
+<li><a href="https://www.gitbook.com/book/eastlakeside/interpy-zh/details" target="_blank" rel="external">Python进阶</a></li>
+<li><a href="https://wizardforcel.gitbooks.io/core-python-2e/content/" target="_blank" rel="external">Python 核心编程 第二版</a> CPyUG译</li>
+<li><a href="http://pythonguidecn.readthedocs.io/zh/latest/" target="_blank" rel="external">Python最佳实践指南</a></li>
+<li><a href="https://www.gitbook.com/book/wizardforcel/python-essential-tutorial/details" target="_blank" rel="external">Python 精要教程</a></li>
+<li><a href="https://www.gitbook.com/book/wizardforcel/python-quant-uqer/details" target="_blank" rel="external">Python 量化交易教程</a></li>
+<li>Django<ul>
+<li><a href="http://django-chinese-docs.readthedocs.org/en/latest/" target="_blank" rel="external">Django 1.5 文档中文版</a> 正在翻译中</li>
+<li><a href="http://django-1-7-doc.coding.io/" target="_blank" rel="external">Diango 1.7 文档中文版</a>  正在翻译中，目前只翻译了目录</li>
+<li><a href="http://python.usyiyi.cn/django/index.html" target="_blank" rel="external">Django 1.8.2 文档中文版</a><br>正在翻译中</li>
+<li><a href="https://github.com/yangyubo/zh-django-best-practices" target="_blank" rel="external">Django 最佳实践</a></li>
+<li><a href="https://www.gitbook.com/book/andrew-liu/django-blog/details" target="_blank" rel="external">Django搭建简易博客教程</a></li>
+<li><a href="http://djangobook.py3k.cn/2.0/" target="_blank" rel="external">The Django Book 中文版</a></li>
+<li><a href="https://github.com/cundi/Django-Design-Patterns-and-Best-Practices" target="_blank" rel="external">Django 设计模式与最佳实践</a></li>
+<li><a href="https://github.com/cundi/Web.Development.with.Django.Cookbook" target="_blank" rel="external">Django 网站开发 Cookbook</a></li>
+<li><a href="https://www.gitbook.com/book/djangogirlstaipei/django-girls-taipei-tutorial/details" target="_blank" rel="external">Django Girls 學習指南</a></li>
+</ul>
+</li>
+<li>Flask<ul>
+<li><a href="http://docs.jinkan.org/docs/flask/" target="_blank" rel="external">Flask 文档中文版</a></li>
+<li><a href="http://docs.jinkan.org/docs/jinja2/" target="_blank" rel="external">Jinja2 文档中文版</a></li>
+<li><a href="http://werkzeug-docs-cn.readthedocs.org/zh_CN/latest/" target="_blank" rel="external">Werkzeug 文档中文版</a></li>
+<li><a href="http://spacewander.github.io/explore-flask-zh/" target="_blank" rel="external">Flask之旅</a></li>
+<li><a href="https://www.gitbook.com/book/wizardforcel/flask-extension-docs/details" target="_blank" rel="external">Flask 扩展文档汇总</a></li>
+<li><a href="http://www.pythondoc.com/flask-mega-tutorial/index.html" target="_blank" rel="external">Flask 大型教程</a></li>
+<li><a href="https://github.com/sixu05202004/sqlalchemy-docs-cn" target="_blank" rel="external">SQLAlchemy 中文文档</a></li>
+</ul>
+</li>
+<li>web.py<ul>
+<li><a href="http://webpy.org/tutorial3.zh-cn" target="_blank" rel="external">web.py 0.3 新手指南</a></li>
+<li><a href="http://webpy.org/cookbook/index.zh-cn" target="_blank" rel="external">Web.py Cookbook 简体中文版</a></li>
+</ul>
+</li>
+<li>Tornado<ul>
+<li><a href="http://demo.pythoner.com/itt2zh/index.html" target="_blank" rel="external">Introduction to Tornado 中文翻译</a></li>
+<li><a href="http://www.nowamagic.net/academy/detail/13321002" target="_blank" rel="external">Tornado源码解析</a></li>
+<li><a href="https://tornado-zh.readthedocs.org/zh/latest/" target="_blank" rel="external">Tornado 4.3 文档中文版</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="R"><a href="#R" class="headerlink" title="R"></a>R</h3><ul>
+<li><a href="https://github.com/yihui/r-ninja" target="_blank" rel="external">R语言忍者秘笈</a></li>
+</ul>
+<h3 id="Ruby"><a href="#Ruby" class="headerlink" title="Ruby"></a>Ruby</h3><ul>
+<li><a href="https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md" target="_blank" rel="external">Ruby 风格指南</a></li>
+<li><a href="https://github.com/JuanitoFatas/rails-style-guide/blob/master/README-zhCN.md" target="_blank" rel="external">Rails 风格指南</a></li>
+<li><a href="http://lrthw.github.io/" target="_blank" rel="external">笨方法學 Ruby</a></li>
+<li><a href="http://guides.ruby-china.org/" target="_blank" rel="external">Ruby on Rails 指南</a></li>
+<li><a href="https://ihower.tw/rails4/index.html" target="_blank" rel="external">Ruby on Rails 實戰聖經</a></li>
+<li><a href="http://railstutorial-china.org/" target="_blank" rel="external">Ruby on Rails Tutorial 原书第 3 版</a> (本书网页版免费提供，电子版以 PDF、EPub 和 Mobi 格式提供购买，仅售 9.9 美元)</li>
+<li><a href="http://rails-practice.com/content/index.html" target="_blank" rel="external">Rails 实践</a></li>
+<li><a href="https://www.gitbook.com/book/kelby/rails-beginner-s-guide/details" target="_blank" rel="external">Rails 5 开发进阶(Beta)</a></li>
+<li><a href="https://www.gitbook.com/book/rocodev/rails-102/details" target="_blank" rel="external">Rails 102</a></li>
+<li><a href="https://wusuopu.gitbooks.io/write-ruby-extension-with-c/content/" target="_blank" rel="external">编写Ruby的C拓展</a></li>
+<li><a href="https://ruby-china.org/topics/22386" target="_blank" rel="external">Ruby 源码解读</a></li>
+<li><a href="http://deathking.github.io/metaprogramming-in-ruby/" target="_blank" rel="external">Ruby中的元编程</a></li>
+</ul>
+<h3 id="Rust"><a href="#Rust" class="headerlink" title="Rust"></a>Rust</h3><ul>
+<li><a href="https://www.gitbook.com/book/kaisery/rust-book-chinese/details" target="_blank" rel="external">rust book 中文翻译</a></li>
+<li><a href="https://github.com/rustcc/RustPrimer" target="_blank" rel="external">rust primer</a></li>
+</ul>
+<h3 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h3><ul>
+<li><a href="http://twitter.github.io/scala_school/zh_cn/index.html" target="_blank" rel="external">Scala课堂</a> (Twitter的Scala中文教程)</li>
+<li><a href="http://twitter.github.io/effectivescala/index-cn.html" target="_blank" rel="external">Effective Scala</a>(Twitter的Scala最佳实践的中文翻译)</li>
+<li><a href="http://zh.scala-tour.com/" target="_blank" rel="external">Scala指南</a></li>
+</ul>
+<h3 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h3><ul>
+<li><a href="https://github.com/qinjx/30min_guides/blob/master/shell.md" target="_blank" rel="external">Shell脚本编程30分钟入门</a></li>
+<li><a href="http://blog.sae.sina.com.cn/archives/3606" target="_blank" rel="external">Bash脚本15分钟进阶教程</a></li>
+<li><a href="https://github.com/me115/linuxtools_rst" target="_blank" rel="external">Linux工具快速教程</a></li>
+<li><a href="https://github.com/wzb56/13_questions_of_shell" target="_blank" rel="external">shell十三问</a></li>
+<li><a href="https://www.gitbook.com/book/tinylab/shellbook/details" target="_blank" rel="external">Shell编程范例</a></li>
+</ul>
+<h3 id="Swift"><a href="#Swift" class="headerlink" title="Swift"></a>Swift</h3><ul>
+<li><a href="http://numbbbbb.github.io/the-swift-programming-language-in-chinese/" target="_blank" rel="external">The Swift Programming Language 中文版</a></li>
+<li><a href="http://dev.swiftguide.cn" target="_blank" rel="external">Swift 语言指南</a></li>
+<li><a href="https://github.com/x140yu/Developing_iOS_8_Apps_With_Swift" target="_blank" rel="external">Stanford 公开课，Developing iOS 8 Apps with Swift 字幕翻译文件</a>   </li>
+<li><a href="http://c4ios.swift.gg" target="_blank" rel="external">C4iOS - COSMOS</a>   </li>
+</ul>
+<h3 id="读书笔记及其它"><a href="#读书笔记及其它" class="headerlink" title="读书笔记及其它"></a>读书笔记及其它</h3><ul>
+<li><a href="https://github.com/fool2fish/dragon-book-exercise-answers" target="_blank" rel="external">编译原理（紫龙书）中文第2版习题答案</a></li>
+<li><a href="http://www.hawstein.com/posts/make-thiner-programming-pearls.html" target="_blank" rel="external">把《编程珠玑》读薄</a></li>
+<li><a href="https://github.com/XiaolongJason/ReadingNote/blob/master/Effective%20C%2B%2B/Effective%20C%2B%2B.md" target="_blank" rel="external">Effective C++读书笔记</a></li>
+<li><a href="https://github.com/qyuhen/book" target="_blank" rel="external">Golang 学习笔记、Python 学习笔记、C 学习笔记</a> (PDF)</li>
+<li><a href="https://github.com/code4craft/jsoup-learning" target="_blank" rel="external">Jsoup 学习笔记</a></li>
+<li><a href="https://github.com/lzjun567/note" target="_blank" rel="external">学习笔记: Vim、Python、memcached</a></li>
+<li><a href="http://www.ituring.com.cn/activity/details/2004" target="_blank" rel="external">图灵开放书翻译计划–C++、Python、Java等</a></li>
+<li><a href="http://g.yeeyan.org/books/2095" target="_blank" rel="external">蒂姆·奥莱利随笔</a> （由译言网翻译，电子版免费）</li>
+<li><a href="http://sicp.readthedocs.org/en/latest/" target="_blank" rel="external">SICP 解题集</a></li>
+<li><a href="https://github.com/hacke2/hacke2.github.io/issues/2" target="_blank" rel="external">精彩博客集合</a></li>
+<li><a href="https://github.com/sparanoid/chinese-copywriting-guidelines" target="_blank" rel="external">中文文案排版指北</a></li>
+<li><a href="http://ganquan.info/standard-c/" target="_blank" rel="external">Standard C 语言标准函数库速查 (Cheat Sheet)</a></li>
+<li><a href="http://gh.amio.us/git-cheatsheet-chs/" target="_blank" rel="external">Git Cheatsheet Chs</a></li>
+<li><a href="http://www.chengweiyang.cn/gitbook/index.html" target="_blank" rel="external">GitBook简明教程</a></li>
+<li><a href="https://github.com/qibaoguang/Study-Step-by-Step/blob/master/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/javascript_the_good_parts.md" target="_blank" rel="external">JavaScript语言精粹</a></li>
+<li><a href="http://producingoss.com/zh/" target="_blank" rel="external">制造开源软件</a></li>
+<li><a href="http://www.dianbo.org/9238/stone/tiwendezhihui.htm" target="_blank" rel="external">提问的智慧</a></li>
+<li><a href="https://github.com/LearnShare/Learning-Markdown" target="_blank" rel="external">Markdown 入门参考</a></li>
+<li><a href="https://github.com/stanzgy/wiki/blob/master/markup/asciidoc-guide.asciidoc" target="_blank" rel="external">AsciiDoc简明指南</a></li>
+<li><a href="http://love-oriented.com/pack/" target="_blank" rel="external">背包问题九讲</a></li>
+<li><a href="https://github.com/qiwsir/ITArticles" target="_blank" rel="external">老齐的技术资料</a></li>
+<li><a href="https://github.com/JacksonTian/fks" target="_blank" rel="external">前端技能汇总</a></li>
+<li><a href="https://github.com/zhuangbiaowei/learn-with-open-source" target="_blank" rel="external">借助开源项目，学习软件开发</a></li>
+<li><a href="https://github.com/h5bp/Front-end-Developer-Interview-Questions/tree/master/Translations/Chinese" target="_blank" rel="external">前端工作面试问题</a></li>
+<li><a href="https://www.gitbook.com/book/yuanbin/algorithm/details" target="_blank" rel="external">leetcode/lintcode题解/算法学习笔记</a></li>
+<li><a href="https://github.com/li-xinyang/FEND_Note" target="_blank" rel="external">前端开发笔记本</a></li>
+</ul>
+<h3 id="测试相关"><a href="#测试相关" class="headerlink" title="测试相关"></a>测试相关</h3><ul>
+<li><a href="http://appium.io/slate/cn/v1.2.0/" target="_blank" rel="external">移动APP自动化测试优秀框架Appium API Reference V1.2.0 CN</a></li>
+</ul>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[APlayer驱动网易云音乐的轮子]]></title>
+      <url>http://haiwx.github.io/2016/09/02/APlayer/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/09/02/57c96b1267690.jpg" alt="AP"><br>可能是因为作者修改不及时，官方说明有一点点问题，经过测试，我把正确的说明写下来（在原官方文档上稍稍修改(￣▽￣)ノ ）。  </p>
+<blockquote>
+<p>轮子：<a href="https://github.com/YUX-IO/163music-APlayer-you-get-docker" target="_blank" rel="external">YUX-IO</a>   </p>
+</blockquote>
+<a id="more"></a>
+<font color="orange"><strong>9月3日更新：</strong></font><font color="blue"><strong>手机UC</strong>浏览器即使是最新版本也出现了未知原因的错误，具体表现：<strong>除单曲播放+无歌词情境外</strong>播放器都会发生排版重叠/错位，其它移动端浏览器包括Via、QQ、Firefox等正常，本人才疏学浅，实在无力解决。我对于这个东西各种不满意，所以以后继续用插件咯。</font>  
+
+<h2 id="单曲播放"><a href="#单曲播放" class="headerlink" title="单曲播放"></a>单曲播放</h2><h3 id="参数："><a href="#参数：" class="headerlink" title="参数："></a>参数：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">id ，顾名思义就是 163 歌曲 ID ，必填</div><div class="line">qssl ，是否使用 HTTPS 协议，非必填，使用为 1 ，不用为 0 ，不填也是 0</div><div class="line">max_width ，非必填，最大宽度，可填写例如 123px, 40%, 32rem 等。不填为 100%</div><div class="line">qlrc ， 1 显示歌词， 0 不显示歌词，非必填，默认不显示</div><div class="line">autoplay ， 1 自动播放， 0 不自动播放 ，默认不自动播放</div><div class="line">narrow ，是否为窄模式(仅显示封面）， 1 显示窄模式， 0 不是窄模式，默认 0</div></pre></td></tr></table></figure>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码 :"></a>示例代码 :</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;iframe https://music.daoapp.io/iframe?song=27808044&amp;qssl=1&amp;qlrc=1&amp;narrow=0&gt;&lt;/ifram&gt;</div></pre></td></tr></table></figure>
+<h2 id="歌单播放"><a href="#歌单播放" class="headerlink" title="歌单播放"></a>歌单播放</h2><h3 id="参数：-1"><a href="#参数：-1" class="headerlink" title="参数："></a>参数：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">id ，顾名思义就是 163 歌单 ID ，必填</div><div class="line">qssl ，是否使用 HTTPS 协议，非必填，使用为 1 ，不用为 0 ，不填也是 0</div><div class="line">max_width ，非必填，最大宽度，可填写例如 123px, 40%, 32rem 等。不填为 100%</div><div class="line">autoplay ， 1 自动播放， 0 不自动播放 ，默认不自动播放</div></pre></td></tr></table></figure>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码 :"></a>示例代码 :</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;iframe https://music.daoapp.io/iframe?playlist=37288058&amp;qssl=1&amp;autoplay=1&amp;max_width=500px&amp;narrow=0&gt;&lt;/ifram&gt;</div></pre></td></tr></table></figure>
+<h2 id="专辑播放"><a href="#专辑播放" class="headerlink" title="专辑播放"></a>专辑播放</h2><h3 id="参数：-2"><a href="#参数：-2" class="headerlink" title="参数："></a>参数：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">id ，顾名思义就是 163 专辑 ID ，必填</div><div class="line">qssl ，是否使用 HTTPS 协议，非必填，使用为 1 ，不用为 0 ，不填也是 0</div><div class="line">max_width ，非必填，最大宽度，可填写例如 123px, 40%, 32rem 等。不填为 100%</div><div class="line">autoplay ， 1 自动播放， 0 不自动播放 ，默认不自动播放</div></pre></td></tr></table></figure>
+<h3 id="示例代码-2"><a href="#示例代码-2" class="headerlink" title="示例代码 :"></a>示例代码 :</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;iframe https://music.daoapp.io/iframe?album=16953&amp;qssl=1&amp;autoplay=1&amp;max_width=500px&amp;narrow=0&gt;&lt;/ifram&gt;</div></pre></td></tr></table></figure>
+<h2 id="最后说明"><a href="#最后说明" class="headerlink" title="最后说明"></a>最后说明</h2><h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><p>ifram标签要添加一些属性，否则我个人感觉是不美观的，主要是消除滚动条和框架边框的问题，当然你可能会觉得不添加属性也好看，反之你也可以添加其他属性，凭自己喜好咯~我添加的如下（不知道为什么我在测试中<em>width=100%</em>才能自适应，百分比看自己喜好233）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;iframe src=&quot;https://music.daoapp.io/iframe?song=408332757&amp;qssl=1&amp;qlrc=1&amp;autoplay=0&quot; width=&quot;100%&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt;&lt;/iframe&gt;</div></pre></td></tr></table></figure></p>
+<p>效果：</p>
+<p><iframe src="https://music.daoapp.io/iframe?song=408332757&qssl=1&qlrc=1&autoplay=0" width="100%" frameborder="0" scrolling="no"></iframe></p>
+<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><p>以前用APlayer插件的时候先要上传音乐，到处找带时间轴的歌词，找封面图片，说真的有一点点繁琐，用框架就很方便啦，填个ID就行了 ♪(´▽｀)</p>
+<hr>
+<font color="red">Ps：歌单及专辑不支持歌词。</font>]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[生命中的再次相遇]]></title>
+      <url>http://haiwx.github.io/2016/08/28/HateTime/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/08/28/57c2dfe3bb4d8.jpg" alt="Time"><br>今天，我和一个以前小学、初中、高中都同在一个学校的同学取得了联系，一个曾经少年时代偷偷喜欢的女孩子。惊喜，难以置信……<a id="more"></a></p>
+<blockquote>
+<p>小学她和我同班。<br>初中她在隔壁班。<br>高中她是文科生。<br>联系中断……  </p>
+</blockquote>
+<div id="aplayer0" class="aplayer" style="margin-bottom: 20px;"><pre class="aplayer-lrc-content">[00:00.00]365日の紙飛行機
+[00:01.51]
+[00:02.54]作词：秋元康
+[00:03.61]编曲：清水哲平
+[00:04.77]演唱：AKB48
+[00:05.99]
+[00:07.01]「阿浅来了」主题歌
+[00:12.44]
+[00:13.65]清晨的天空我抬头仰望
+[00:17.72]今天一天究竟会怎样
+[00:22.24]期盼能保持笑容灿烂绽放
+[00:27.07]悄悄许下一个愿望
+[00:31.22]
+[00:31.95]偶尔有雨见不到阳光
+[00:35.89]偶尔有泪也会溢出眼眶
+[00:40.58]若不能如愿以偿也不必感伤
+[00:45.13]明天更努力向上
+[00:49.07]
+[00:50.10]一直的梦 情景都一样
+[00:54.42]另一个我生活得不一样
+[00:58.81]追求自己梦想 没有丝毫阻拦
+[01:03.24]随心所欲 梦境太理想
+[01:06.55]
+[01:07.13]人生就像纸飞机一样
+[01:11.27]载上美好心愿 飞上天去翱翔
+[01:16.61]在风中向前方 竭尽全身的力量
+[01:21.59]只求不迷失方向
+[01:24.71]
+[01:25.25]不必去较量距离短或长
+[01:29.29]而是怎样飞翔 飞越了怎样的地方
+[01:34.69]这才是最重要 时刻牢记在心上
+[01:39.44]就让心向哪方飞哪方
+[01:43.78]365天的时光
+[01:48.60]
+[02:02.51]或许只有寥寥的星光
+[02:06.42]或许黑夜没有一丝光亮
+[02:11.06]若感觉心灰沮丧这样的时段
+[02:15.67]不妨向人倾诉衷肠
+[02:19.86]
+[02:20.69]请抛开那消极的想象
+[02:24.93]我们每个人其实不孤单
+[02:29.57]真情在人间就在你身边
+[02:33.68]只是没能用心去发现
+[02:37.15]
+[02:37.68]人生就像纸飞机一样
+[02:41.73]载上满满的爱 飞上天在翱翔
+[02:47.35]凭自信不彷徨 张开骄傲的翅膀
+[02:51.93]人们会羡慕地仰望
+[02:55.68]即使不懂得怎样折纸张
+[02:59.88]终能够有一天 一飞冲天实现梦想
+[03:05.34]那就是希望 推动前进的力量
+[03:10.03]啊啊 开开心心活一场
+[03:14.45]365天的时光
+[03:19.07]
+[03:36.75]人生就像纸飞机一样
+[03:40.62]载上美好心愿 飞上天去翱翔
+[03:46.00]在风中向前方 竭尽全身的力量
+[03:50.91]只求不迷失方向
+[03:54.10]
+[03:54.66]不必去较量距离短或长
+[03:58.61]而是怎样飞翔 飞越了怎样的地方
+[04:04.13]这才是最重要 时刻牢记在心上
+[04:08.89]就让心向哪方飞哪方
+[04:13.15]365天的时光
+[04:17.85]
+[04:20.70]展翅飞翔！尝试飞翔！
+[04:25.25]展翅飞翔！尝试飞翔！
+[04:29.69]展翅飞翔！尝试飞翔！
+[04:42.03]</pre></div><script>var aplayer0 = new APlayer({element: document.getElementById("aplayer0"),narrow: false,autoplay: true,showlrc: 2,music : {title: "365日の紙飛行機",author: "AKB48",url: "http://7xv7yo.com1.z0.glb.clouddn.com/AKB48%20-%20365%E6%97%A5%E3%81%AE%E7%B4%99%E9%A3%9B%E8%A1%8C%E6%A9%9F.mp3",pic: "https://ooo.0o0.ooo/2016/09/03/57cad4631ee6a.jpg"}});aplayer0.init();</script>
+<p>今天，竟然在大学校园看到了她。太久不见，聊天已经不知道要说些什么。相互问好，寒暄几句，只有祝福~</p>
+<hr>
+<p><img src="https://ooo.0o0.ooo/2016/08/28/57c2d8069c7e2.png" alt="Time"><br>谢谢，我会的~</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[DPlayerの弹幕测试]]></title>
+      <url>http://haiwx.github.io/2016/08/08/DanMu/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/08/07/57a7ef6b65d1a.jpg" alt="FLY"><br>DPlayer支持弹幕，按照官方文档配置好必要的参数，今天就来测试一下！狐吧和群里的基佬们，泥萌在哪里，快来发弹幕吧 (ง •̀_•́)ง <a id="more"></a></p>
+<blockquote>
+<p>由于HTTP资源的缘故，建议到<a href="http://haiwx.coding.me/2016/08/08/DanMu" target="_blank" rel="external">这里</a>测试。  </p>
+</blockquote>
+<hr>
+<div id="dplayer0" class="dplayer" style="margin-bottom: 20px;"></div><script>var dplayer0 = new DPlayer({"element":document.getElementById("dplayer0"),"autoplay":false,"theme":"#FADFA3","loop":true,"screenshot":true,"video":{"url":"http://7xv7yo.com1.z0.glb.clouddn.com/FIREFOX.mp4","pic":"https://ooo.0o0.ooo/2016/08/07/57a7e2007e844.jpg"},"danmaku":{"api":"http://dplayer.daoapp.io","id":"FIREFOX0808","token":"tokendemo"}});</script>]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[用Hexo插件插入音乐和视频教程]]></title>
+      <url>http://haiwx.github.io/2016/08/06/HexoAV/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/08/05/57a5395b3a365.jpg" alt="INS"><br>在Hexo博客中插入音乐视频除了一般的框架法，其实还可以用插件，话不多说，那就直接开始吧！<a id="more"></a>首先是安装所需的插件：<a href="https://github.com/grzhan/hexo-tag-aplayer" target="_blank" rel="external">APlayer</a>和<a href="https://github.com/NextMoe/hexo-tag-dplayer" target="_blank" rel="external">DPlayer</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install hexo-tag-aplayer --save</div><div class="line">npm install hexo-tag-dplayer --save</div></pre></td></tr></table></figure>
+<p>这两个插件现在都有一些小小的问题，作者正在修复，不久后会解决，临时方法如下：在图示位置新建箭头所标文件，注意大小写，空文件即可。<br><img src="https://ooo.0o0.ooo/2016/08/05/57a53089e6fd5.png" alt="INS"><br><img src="https://ooo.0o0.ooo/2016/08/05/57a53089c543d.png" alt="INS"></p>
+<p><font color="#D70DEC">8月23日更新：DPlayer新增视频截图，热键，主题选项。</font></p>
+<hr>
+<p>简单介绍一下使用方法。</p>
+<h1 id="APlayer的使用"><a href="#APlayer的使用" class="headerlink" title="APlayer的使用"></a>APlayer的使用</h1><h2 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% aplayer title author url [picture_url, narrow, autoplay, width:xxx, lrc:xxx] %&#125;</div></pre></td></tr></table></figure>
+<h2 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;% aplayerlrc &quot;title&quot; &quot;author&quot; &quot;url&quot; &quot;autoplay&quot; %&#125;</div><div class="line">[00:00.00]歌词在这里</div><div class="line">&#123;% endaplayerlrc %&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>其他参数：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">title : 歌曲名</div><div class="line">author: 演唱者</div><div class="line">url: 音乐链接</div><div class="line">picture_url: 可选, 播放器封面图片的链接</div><div class="line">narrow: 可选, 窄样式</div><div class="line">autoplay: 可选, 自动播放音乐，可能不支持移动端</div><div class="line">width:xxx: 可选, 前缀(width:), 播放器宽度 (默认: 100%)</div><div class="line">lrc:xxx: 可选, 前缀(lrc:), 歌词链接</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>示例代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% aplayer &quot;Caffeine&quot; &quot;Jeff Williams&quot; &quot;http://7xq131.com1.z0.glb.clouddn.com/Preparation.mp3&quot; &quot;autoplay&quot; %&#125;</div></pre></td></tr></table></figure></p>
+<p><font color="red">无歌词</font><br><div id="aplayer1" class="aplayer" style="margin-bottom: 20px;"></div><script>var aplayer1 = new APlayer({element: document.getElementById("aplayer1"),narrow: false,autoplay: false,showlrc: 0,music : {title: "等待",author: "黄龄",url: "http://7xv7yo.com1.z0.glb.clouddn.com/%E9%BB%84%E9%BE%84%20-%20%E7%AD%89%E5%BE%85.mp3",pic: "https://ooo.0o0.ooo/2016/08/06/57a6acb142455.jpg"}});aplayer1.init();</script></p>
+<p><font color="blue">有歌词</font><br><div id="aplayer2" class="aplayer" style="margin-bottom: 20px;"><pre class="aplayer-lrc-content">[00:07.50]恋人心
+[00:08.48]
+[00:09.34]作词：张超
+[00:10.39]作曲：张超
+[00:11.51]演唱：魏新雨
+[00:12.64]
+[00:13.60]
+[00:14.39]
+[00:28.80]化作风化作雨化作春走向你
+[00:34.54]梦如声梦如影梦是遥望的掌印
+[00:40.27]化作烟化作泥化作云飘向你
+[00:46.08]思如海恋如城思念最遥不可及
+[00:51.85]
+[00:52.30]你问西湖水偷走她的几分美
+[00:57.83]时光一去不再信誓旦旦留给谁
+[01:03.75]你问长江水淘尽心酸的滋味
+[01:09.55]剩半颗恋人心唤不回
+[01:14.47]
+[01:39.11]化作诗化作笔化作灯写着你
+[01:44.76]默念着轻叹着那些深沉的字句
+[01:50.61]化作路化作径化作情找寻你
+[01:56.37]爱一次梦一场思念最遥遥无期
+[02:01.81]
+[02:02.45]你问西湖水偷走她的几分美
+[02:08.22]时光一去不再信誓旦旦留给谁
+[02:14.05]你问长江水淘尽心酸的滋味
+[02:19.83]剩半颗恋人心唤不回
+[02:25.39]
+[02:25.86]你问西湖水偷走她的几分美
+[02:31.58]时光一去不再信誓旦旦留给谁
+[02:37.46]你问长江水淘尽心酸的滋味
+[02:43.43]剩半颗恋人心唤不回
+[02:49.25]剩半颗恋人心唤不回
+[02:55.00]剩半颗恋人心唤不回
+[03:04.80]
+[03:05.92] </pre></div><script>var aplayer2 = new APlayer({element: document.getElementById("aplayer2"),narrow: false,autoplay: false,showlrc: 2,music : {title: "恋人心",author: "魏新雨",url: "http://7xv7yo.com1.z0.glb.clouddn.com/%E9%AD%8F%E6%96%B0%E9%9B%A8%20-%20%E6%81%8B%E4%BA%BA%E5%BF%83.mp3",pic: "https://ooo.0o0.ooo/2016/08/04/57a2e6a112247.jpg"}});aplayer2.init();</script></p>
+<h1 id="DPlayer的使用"><a href="#DPlayer的使用" class="headerlink" title="DPlayer的使用"></a>DPlayer的使用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% dplayer key=value ... %&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>参数:<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">autoplay: 是否自动播放</div><div class="line">theme: 主题颜色</div><div class="line">loop: 是否循环播放</div><div class="line">lang: 语言，zh-中文&amp;en-英文</div><div class="line">url: 视频链接</div><div class="line">pic: 视频封面图片</div><div class="line">screenshot: 视频截图</div><div class="line">hotkey: 绑定热键，包括左右和空格，默认为true</div><div class="line">preload: 加载方式，auto&amp;none</div><div class="line">api: DPlayer 弹幕后台地址</div><div class="line">id: 详见 https://github.com/DIYgod/DPlayer</div><div class="line">token: 详见 https://github.com/DIYgod/DPlayer</div><div class="line">maximum: 弹幕最大数目</div><div class="line">width: DPlayer的最大宽度</div><div class="line">height: DPlayer的最大高度</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>示例代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;% dplayer &quot;url=http://devtest.qiniudn.com/若能绽放光芒.mp4&quot; &quot;api=http://dplayer.daoapp.io&quot; &quot;pic=http://devtest.qiniudn.com/若能绽放光芒.png&quot; &quot;id=9E2E3368B56CDBB4&quot; &quot;perload=metadata&quot; &quot;loop=yes&quot; &quot;theme=#FADFA3&quot; &quot;autoplay=false&quot; &quot;token=tokendemo&quot; &quot;screenshot=true&quot; %&#125;</div></pre></td></tr></table></figure></p>
+<div id="dplayer1" class="dplayer" style="margin-bottom: 20px;"></div><script>var dplayer1 = new DPlayer({"element":document.getElementById("dplayer1"),"autoplay":false,"theme":"#FADFA3","loop":true,"screenshot":true,"video":{"url":"http://devtest.qiniudn.com/若能绽放光芒.mp4","pic":"http://devtest.qiniudn.com/若能绽放光芒.png"},"danmaku":{"api":"http://dplayer.daoapp.io","id":"9E2E3368B56CDBB4","token":"tokendemo"}});</script>
+<p>基本上就是这些，再次感谢<a href="https://github.com/DIYgod" target="_blank" rel="external">DIYgod</a>的原创以及<a href="https://github.com/grzhan/hexo-tag-aplayer" target="_blank" rel="external">grzhan</a>和<a href="https://github.com/NextMoe/hexo-tag-dplayer" target="_blank" rel="external">NextMoe</a>对Hexo所做的移植！</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[给博客加了点特效]]></title>
+      <url>http://haiwx.github.io/2016/08/02/Javascript/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/08/02/57a147398fccb.jpg" alt="JS"></p>
+<p><font color="red">爱心</font>&amp;<font color="blue">粒子</font>，最早是从这里看到的→<a href="https://longhaoteng.github.io" target="_blank" rel="external">Mr.long’s blog</a>（<em>点击查看粒子特效效果</em>），感谢博主的指点，现写教程如下。<br><a id="more"></a></p>
+<h1 id="获取JS代码"><a href="#获取JS代码" class="headerlink" title="获取JS代码"></a>获取JS代码</h1><p>你可以直接F12审查元素，或者去<a href="https://github.com/haiwx/haiwx.github.io/tree/master/js/src" target="_blank" rel="external">GitHub</a>中获取：<code>love.js</code>和<code>particles.js</code>。</p>
+<h1 id="添加到文件夹"><a href="#添加到文件夹" class="headerlink" title="添加到文件夹"></a>添加到文件夹</h1><p>如图<br><img src="https://ooo.0o0.ooo/2016/08/02/57a1573f2bb14.png" alt="JS"></p>
+<h1 id="添加到布局文件"><a href="#添加到布局文件" class="headerlink" title="添加到布局文件"></a>添加到布局文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/js/src/love.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/js/src/particles.js&quot; count=&quot;50&quot; zindex=&quot;-2&quot; opacity=&quot;1&quot; color=&quot;0,104,183&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p><del>如果你对javascript熟悉的话，可自行修改相关参数,<code>count=&quot;50&quot; zindex=&quot;-2&quot; opacity=&quot;1&quot; color=&quot;0,104,183</code>“是我的配置。</del><br><img src="https://ooo.0o0.ooo/2016/08/02/57a158cf51bf8.png" alt="JS"><br>依照图中位置添加。<br><img src="https://ooo.0o0.ooo/2016/08/02/57a157469bc87.png" alt="JS"><br>接着，hexo d -g，大功告成。</p>
+<hr>
+<p>最后：</p>
+<ul>
+<li>感觉粒子特效挺烧资源的，寡人的辣鸡笔记本打开博客页面不一会CPU占用就上去了。</li>
+<li>网上的各种JS特效有很多，可以自己找找加上，应该都是相通的。</li>
+</ul>
+<hr>
+<p><font color="red">0805更新</font>：实在受不了粒子特效坑爹的CPU占用了，无奈去掉了……</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[一份普通的M3U8电视列表]]></title>
+      <url>http://haiwx.github.io/2016/07/25/TVList/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/07/31/579e8e4a0f89a.jpg" alt="List"><br>电视直播源来自：<a href="https://github.com/yuanxin69/m3u" target="_blank" rel="external">yuanxin69</a>，列表一共1632条，我只是用工具转换成了<code>M3U8</code>文件，支持M3U8的播放器应该都能使用,需者自取。  </p>
+<p><a id="more"></a>网上电视直播源有很多，但是广播源貌似不好找，有时间我自己做一个好了。</p>
+<hr>
+<p>下载链接：<a href="http://dwz.cn/3Qt8sS" target="_blank" rel="external">→ GitHub</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[解决最近IDM+网盘助手速度变慢的一方法]]></title>
+      <url>http://haiwx.github.io/2016/07/01/BaiduYun/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/07/09/5781c13021a8e.jpg" alt="pan"><br>百度最近自建了一个极其强（Là）大（Jī）且支持HTTPS的CDN，不过有点渣以致IDM下载的速度与之前相差很多。可以看到是<code>lowcdn</code>（是低速的意思吗 →_→）。<a id="more"></a>原来支持Https的CDN是<a href="http://www.chinanetcenter.com/" target="_blank" rel="external">网宿</a>的，国内最大的，所以速度很快。<br><img src="https://ooo.0o0.ooo/2016/06/30/5774d56f2419f.jpg" alt="pan"><br>解决办法并不难，手动在地址栏把协议更换为<code>Https</code>即可，<del>你也可以用一些扩展或者在网盘页右上角手动开启Https</del>，但最简单粗暴的还是手动修改(´∀`)，改了以后回车，你可以发现已经没有坑爹的“low”了<br><img src="https://ooo.0o0.ooo/2016/07/05/577c5b1525dd9.jpg" alt="pan"><br><img src="https://ooo.0o0.ooo/2016/07/05/577c5b1609014.jpg" alt="pan"><br>开始下载，可以看到速度快了不少呢 ♪(´▽｀)</p>
+<hr>
+<p><em>附对比图</em><br><img src="https://ooo.0o0.ooo/2016/07/05/577c5b15eb626.jpg" alt="pan"><br><img src="https://ooo.0o0.ooo/2016/07/05/577c5b15ea858.jpg" alt="pan"></p>
+<font color="#FF33FF">注意：你可能需要在网盘助手脚本这里添加<code>https://pan.baidu.com/*</code>，以使脚本在Https页面生效！,当然你也可以加一个重定向规则。<font><br><img src="https://ooo.0o0.ooo/2016/07/05/577c5b1678a8d.jpg" alt="pan"><br><br><font color="red">不知不觉2016年的一半已经过去了，好忧桑。。。</font></font></font>]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[记一次悲惨的丢失多说评论事件]]></title>
+      <url>http://haiwx.github.io/2016/06/20/bzuh/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/07/09/5781c1ce2fa76.jpg" alt="blog"><br>今天博客迎来了第一个留下评论的人，然后第二个，第三个，非常开心。然后我很快发现了博客的新问题。<a id="more"></a>多说的新回复提示框中的超链接点击后会进入<code>http://yoursite.com/xxx</code>，手机访问的话可能跳转到不良网站，什么鬼？到Hexo群里看了一下别人的配置，先怀疑是config.yml中的url问题，我设置的是https的网址，之前在弄本地搜索的时候其实遇过yoursite的问题了，url就是当时加的，然后本地搜索可以正常使用了.改配置，hexo d -g，结果：并不行，依然是yoursite，跪了。 这过程中，狐吧基佬群在博文中发了一个链接说可能是多说的锅，新建站点可能就解决了，试试呗~ 导出评论到本地，新建，改主题配置，往上推，顺便手贱删掉了原来的多说站点（造成不能再进行评论导出，也许第一次导出哪里出了岔子，然而现在说什么都迟了）。然后导入数据，试着发一条评论，结果提示参数错误，多次尝试新建导入新建导入无果，遂放弃，只盼yoursite的问题已修复好，阿门。 (︶︹︺)  </p>
+<font color="red">六月二十一日更新：经测试已经修复。</font><br><font color="blue">十分抱歉，试了各种办法，还是无法恢复你们的评论 ::&gt;_&lt;:: @Sora @雨中漫步</font>]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[她叫秋明月]]></title>
+      <url>http://haiwx.github.io/2016/06/14/xnuo/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><blockquote>
+<p>原作者：<a href="http://noe132.com/blog/2016/06/09/ta-jiao-qiu-ming-yue-firefox-essay/" target="_blank" rel="external">noe132</a><br>内容纯属虚构，仅图博大家一乐。</p>
+</blockquote>
+<p>我叫杜厘俊，她叫秋明月。<br>我们是在高中认识的，高中她和我一个班，我成绩差，坐在后面，她成绩好，坐在前面。<a id="more"></a><br>她是走读生，每天都回家，我也是，但是正好不同道，出了校门，她往左走，我往右走，走不到一块。<br>她有一头乌黑的短发，齐刘海挂在额前，头发搭在两边，正好遮住脸的两侧，微微卷向内侧。我喜欢看着她，因为我觉得这样的发型很可爱。<br>我喜欢她笑的样子，她笑起来特别好看，脸软软的样子，看着她笑我也笑，于是她总骂我傻笑。<br>我想我是喜欢上了她。<br>于是乎下课我便逗她玩，一伸手摸一把头发就跑，她便转身怒视着我，对我说有种再来一次，我当然不会上当，因为我准备下次拍她肩膀吓吓她。<br>文理分科时，我和她都选了文科，幸运的是我们又在一个班。<br>高中三年过的很快，一眨眼就过去了。<br>高考考完，我对她说，我很喜欢你。她说嘿，我猜到了，我知道你喜欢我。我问，你喜欢我吗？她说，唔，我不太喜欢你，不过我也不太讨厌你，虽然你每次欺负我。之后我们随便聊了两句，但我知道，今后的路肯定是渐行渐远了。<br>高考成绩出来，我考的很烂，她考的很好。<br>我不知道该怎么办，高考志愿也是瞎写。<br>我读了一个城市的一个三本学校。<br>我被录取的专业是计算机，一个文科生居然录到了计算机专业。说实话，我对计算机全不了解，只是偶尔用过几回，对于在大学的学习里根本没有底。<br>不过，凭着我的好奇心和聪明劲，我渐渐对计算机有了兴趣，大学读了两年，我便学会了网站制作，还开了一个自己的博客。<br>在学习过程中，遇到了不少问题，但被我一个一个解决。我换过很多浏览器，什么傲游，枫叶，世界之窗，百度浏览器，QQ浏览器，没有一个让我用的顺手的，直到我在网上见到有人发帖推荐火狐浏览器。<br>我当时并不知道当时火狐浏览器的推广主要靠各大小黄片网站，我便百度了一个下载使用。一开始用的很不顺手，但是我喜欢把一个软件研究透，各种功能设置全部了解，后来发现火狐强大的自定义功能，我便深深爱上了这个浏览器。<br>大学前两年，我所有的热情全放在学习计算机知识上了，什么社团，活动，学生会，统统没参加，当然，也没勾搭上什么妹子。<br>一次偶然，我联系到了明月。她说他在那里一个一本学校读英语专业，我当时喜出望外，没想到居然在和我同一个城市念书，而且距离也不是太远，她也表示很惊奇，好久没和老同学见面了，于是我们约了个周末在外面见面。<br>那天我们聊了很多很多，从高中毕业后，两年多没联系，都说了一大堆。她说她曾找了个男朋友，她很喜欢他，但是莫名其妙却被甩了，她很伤心。我便咒骂那个人，说他真不是个男人，对感情一点都不认真，只知道玩弄感情，浪费别人的美好青春。我瞄着她，发现她还是和高中一样没变，一头短发，还是那么清纯可爱。她说我似乎变得成熟多了，不像高中时候那个傻小子那样了。<br>回去之后，我们便偶尔保持着联系，有时会聊聊各自的生活。<br>因为对火狐浏览器很感兴趣，所以一直很关注火狐社区的动态。一次偶然，我在网上看到了本地区的firefox社区见面会，便报名参加了，到了那天我便坐车到社区见面会的地点去。快到见面会的地点，恰巧在路上碰见明月，她一个人呆着耳机，闷闷不乐的在街上走着，我便问她怎么了，她告诉我说，学校里各种七七八八的事情弄得烦透了，我说，正好我参加一个社区见面会，跟我一起来吧，我便喊上她一起参加了firefox社区见面会。<br>社区见面会的内容对于她来说并不是很有趣，我半只耳朵听见面会活动的内容，半只耳朵听她的吐槽。社区见面会的东西我并没有听到多少，大部分都是听她在对我吐苦水了。见面会结束，她请我去她租的房子坐一坐，说就在附近。她听说我是学计算机的，她的电脑运行起来很慢，让我帮她看一看。我接过电脑，发现里面真是乱七八糟。我卸载了个种电脑管家，毒霸，卫士，折腾了老半天，顺便给她装了个火狐浏览器。我告诉她说，这个浏览器就是今天社区见面会讨论的内容。她一脸惊讶，没想到一个浏览器也能有线下的见面会，我告诉他说，这个浏览器功能很强大。装上扩展，能去广告，能方便的下载视频，能安装很多附加功能。我顺便给他安装了一个我写的iciba划词翻译脚本，我说，你英语专业，这东西肯定用得到。她说，没想到一个浏览器这么厉害。她称赞的时候，我偷偷登陆上了我新建的一个firefox同步账号，勾上了书签同步。<br>回去后，我们联系的更多了，她有什么有趣的都和我分享，经常聊些什么好玩的好吃的，什么在校园里发现了什么虫子呀，楼下的橘子树还没成熟就被人摘光了呀，经常聊天到深夜才睡觉。我渐渐感觉越来越喜欢她，已经成了日常生活中的一部分了。<br>在我感觉到我和她都互相依赖的时候，我打开了我的firefox，登陆上同步账号，在书签工具栏上新建了几个文件夹，每个文件夹名称写一个字。<br>秋月拿出电脑，打开浏览器准备使用，惊奇的发现书签栏写着一句话，「杜厘俊喜欢秋明月」。秋月惊讶的愣了半天，然后给我打了个电话，问是不是我弄的。我嘿嘿一笑，约她出来一起吃东西，顺便告诉她。<br>我们约在了江边的风光带见面。一见面，我还没开口说话，她抢先一步说，秋明月也喜欢杜厘俊！我哈哈大笑，说你可真可爱。夏天的晚上，江边的凉风沁人心脾。<br>我对她说，你眼睛上粘着什么风吹上的东西吧，你把眼睛闭上，我把它弄掉。<br>她闭上了眼睛，我一口亲了下去。</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[关于博客Https和图床的一点不开心]]></title>
+      <url>http://haiwx.github.io/2016/06/11/nkxn/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/07/09/5781cec28c5ce.jpg" alt="遥"><br>六月八日，我用手机UC访问本博客时发现文章底部的多说评论框“消失”了，然后我用其它的浏览器访问了一下，一切都是正常的啊，我一下子就懵逼了。<a id="more"></a><br>花了十几分钟大致排查了一下，发现原来是UC<code>广告过滤</code>的锅,总不能不过滤广告啊，怎么办？于是，我手动加了<em>Https</em>，还真可以诶，正常访问 ⊙﹏⊙!<br><img src="https://ooo.0o0.ooo/2016/07/04/5779fa15d10a3.jpg" alt="UC"><br>六月九日，我看到了这个，EXO ME ？吓得我赶紧开启强制<em>Https</em>。♪(´▽｀)<br><img src="https://ooo.0o0.ooo/2016/07/05/577bd294f409e.jpg" alt="UC"><br>六月十日，中午，我意识到GitHub的个人免费空间是有限的，不能总放在resource文件夹里，那样过不了多久就会BOOM的，于是乎我就注册了<a href="https://portal.qiniu.com" target="_blank" rel="external">七牛云</a>，用来做图床，不错哟，实名认证后，免费额度绝对够用了 (╯-╰)/<br><img src="https://ooo.0o0.ooo/2016/07/05/577bd2952120a.jpg" alt="US"><br>六月十日，下午，一个尴尬的问题出现了，由于<code>七牛云</code>的外链是<em>Http</em>的，导致博客页面不安全了，特别是火狐等一些浏览器会出现一个醒目的符号来提示本页面不是安全连接，强迫症真的忍不了，网上搜索了一下，七牛貌似大概可能是支持Https的，可是需要充钱，具体收费标准脑子笨也看不懂所以不打算用这个服务了 (◣_◢)<br><img src="https://ooo.0o0.ooo/2016/07/05/577bd294b4d92.jpg" alt="UD"><br>好吧，就在刚刚，我还是取消强制<em>Https</em>了，那个感叹号真的忍不了，还望哪位大神可以告诉我哪里有安全的Https图床，(ㄒoㄒ)(ㄒoㄒ)(ㄒoㄒ)</p>
+<hr>
+<p><font color="red">六月十六日</font>更新，把图床更换为新浪之后，问题解决了……<br>ps：最后关于博客域名的问题，至少在年底以前我会继续用Git的二级域名，去年年底通过腾讯云是买了一个.com的米，买了之后有点不喜欢，然后就把它给一个网上的朋友用了，So，等明年的域名兑换券下来后我再考虑更换域名咯~</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[守望先锋]]></title>
+      <url>http://haiwx.github.io/2016/06/10/OW/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/07/09/5781cb98164f9.jpg" alt="守望"><br>守望先（Pì）锋（Gǔ），你玩了吗？窝已经中毒辣，快来一起吸吧~ 多谢土豪F同学借我玩，可惜自己手残，玩玩人机就好了，拉低人家胜率就不好了。<br><a id="more"></a><br> (╯-╰)/ 最喜欢用死神和堡垒 ~ ~<br><img src="https://ooo.0o0.ooo/2016/07/05/577bd18faf196.jpg" alt="守望"><br><img src="https://ooo.0o0.ooo/2016/07/05/577bd18f26984.jpg" alt="守望"><br><img src="https://ooo.0o0.ooo/2016/07/05/577bd18faae0d.jpg" alt="守望"><br><img src="https://ooo.0o0.ooo/2016/07/05/577bd18f18819.jpg" alt="守望"></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[火狐，为自由而生！]]></title>
+      <url>http://haiwx.github.io/2016/06/10/Firefox/</url>
+      <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><script src="/assets/js/APlayer.min.js"> </script><p><img src="https://ooo.0o0.ooo/2016/07/09/5781d1723c9ca.jpg" alt="浏览器"><br>我的火狐时尚时尚最时尚 ヽ(●´ε｀●)ノ<br>感谢<a href="http://www.runningcheese.com/" target="_blank" rel="external">RunningCheese</a>提供的的<code>定制版火狐</code>，<em>界面优美，功能强大，操作简单</em>，你值得拥有！</p>
+]]></content>
+    </entry>
+    
+  
+  
+</search>
